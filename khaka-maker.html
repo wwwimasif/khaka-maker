@@ -11,541 +11,500 @@
 <style>
   :root{
     --bg:#f4efe6; --bg2:#ece4d6; --panel:#fffdf9; --ink:#1d1a16; --muted:#6f675c; --line:#e4dacb;
-    --field:#faf6ef; --accent:#0f7a63; --accent2:#c9822b; --accent-ink:#ffffff;
+    --field:#faf6ef; --accent:#0f7a63; --accent2:#c9822b; --accent-ink:#ffffff; --soft:#e8f3ee;
     --glow:rgba(15,122,99,.16); --warn:#b44a1c; --ok:#0f7a63; --shadow:0 1px 2px rgba(40,30,15,.06),0 10px 30px rgba(40,30,15,.08);
   }
   @media (prefers-color-scheme: dark){
     :root{
       --bg:#0f0e0c; --bg2:#17150f; --panel:#1a1814; --ink:#f3eee5; --muted:#a39a8c; --line:#2f2b24;
-      --field:#13110e; --accent:#34c39f; --accent2:#e3a34d; --accent-ink:#06140f;
+      --field:#13110e; --accent:#34c39f; --accent2:#e3a34d; --accent-ink:#06140f; --soft:#17221e;
       --glow:rgba(52,195,159,.18); --warn:#f29a6e; --ok:#34c39f; --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 40px rgba(0,0,0,.45);
     }
   }
   *{box-sizing:border-box}
   html{background:var(--bg)}
-  body{margin:0;min-height:100vh;color:var(--ink);font:17px/1.6 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
-    background:
-      radial-gradient(900px 420px at 85% -10%, var(--glow), transparent 70%),
-      radial-gradient(700px 380px at -10% 10%, rgba(201,130,43,.12), transparent 70%),
-      var(--bg);}
-  .wrap{max-width:980px;margin:0 auto;padding:28px 16px 64px}
+  body{margin:0;min-height:100vh;color:var(--ink);font:16.5px/1.6 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    background:radial-gradient(900px 420px at 85% -10%, var(--glow), transparent 70%),radial-gradient(700px 380px at -10% 10%, rgba(201,130,43,.12), transparent 70%),var(--bg);}
+  .ur{font-family:"Noto Nastaliq Urdu",serif;line-height:2}
+  .wrap{max-width:1280px;margin:0 auto;padding:22px 16px 70px}
 
-  /* header */
-  .hero{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
-  .brand{display:flex;align-items:center;gap:16px}
-  .seal{width:76px;height:76px;border-radius:22px;display:grid;place-items:center;flex:none;
-    background:linear-gradient(135deg,var(--accent),#0b5d4b 60%,var(--accent2));box-shadow:0 10px 26px var(--glow)}
-  .seal span{font-family:"Noto Nastaliq Urdu",serif;font-weight:700;color:#fff;font-size:30px;line-height:1;transform:translateY(-6px)}
-  h1{margin:0;font-size:32px;font-weight:800;letter-spacing:-.02em}
-  h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .tag{margin:2px 0 0;color:var(--muted);font-size:15.5px}
-  .keychip{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel);
-    font-size:14.5px;font-weight:600;cursor:pointer;color:var(--ink);box-shadow:var(--shadow)}
-  .dot{width:9px;height:9px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 4px rgba(180,74,28,.15)}
-  .keychip.ok .dot{background:var(--ok);box-shadow:0 0 0 4px var(--glow)}
+  /* hero */
+  .hero{position:relative;overflow:hidden;border-radius:26px;padding:22px 26px;margin-bottom:18px;color:#fff;
+    background:linear-gradient(120deg,#0b5d4b 0%,var(--accent) 45%,var(--accent2) 100%);box-shadow:0 16px 40px var(--glow)}
+  .hero .wm{position:absolute;right:-10px;top:-30px;font-family:"Noto Nastaliq Urdu",serif;font-size:170px;line-height:1;opacity:.12;pointer-events:none;user-select:none}
+  .hero .row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;position:relative}
+  .hero h1{margin:0;font-size:30px;font-weight:800;letter-spacing:-.02em}
+  .hero p{margin:4px 0 0;opacity:.9;font-size:15px}
+  .hero .ux{font-family:"Noto Nastaliq Urdu",serif;font-size:22px;line-height:1.6;margin-top:6px;opacity:.95}
+  .keychip{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);
+    font-size:14px;font-weight:600;cursor:pointer;color:#fff;backdrop-filter:blur(6px)}
+  .dot{width:9px;height:9px;border-radius:50%;background:#ffb27a;box-shadow:0 0 0 4px rgba(255,178,122,.25)}
+  .keychip.ok .dot{background:#8ff2d4;box-shadow:0 0 0 4px rgba(143,242,212,.25)}
+  .hero .figs{position:absolute;right:300px;bottom:-6px;opacity:.9}
+  @media (max-width:1100px){.hero .figs{display:none}}
 
-  /* panels */
-  .panel{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px;margin-bottom:18px;box-shadow:var(--shadow)}
-  .step{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-weight:700;font-size:16px}
-  .step i{font-style:normal;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;
-    background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
-  label{display:block;font-weight:600;margin:0 0 6px;font-size:15px}
-  textarea,input,select{width:100%;font:inherit;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;
-    transition:border-color .15s, box-shadow .15s}
+  /* grid */
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+  @media (max-width:980px){.grid{grid-template-columns:1fr}}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}
+  .step{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-weight:800;font-size:16px}
+  .step i{font-style:normal;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+  label{display:block;font-weight:600;margin:0 0 6px;font-size:14.5px}
+  textarea,input,select{width:100%;font:inherit;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;transition:border-color .15s, box-shadow .15s}
   textarea:focus,input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--glow)}
-  .sub{color:var(--muted);font-size:14px;margin:6px 0 14px}
+  .sub{color:var(--muted);font-size:13.5px;margin:6px 0 12px}
 
   /* settings */
   details.settings{padding:0;overflow:hidden}
-  details.settings summary{list-style:none;cursor:pointer;padding:16px 22px;font-weight:700;display:flex;align-items:center;gap:10px}
+  details.settings summary{list-style:none;cursor:pointer;padding:14px 20px;font-weight:700;display:flex;align-items:center;gap:10px}
   details.settings summary::-webkit-details-marker{display:none}
   details.settings summary::after{content:"";margin-left:auto;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
   details.settings[open] summary::after{transform:rotate(-135deg)}
-  .settings-body{padding:0 22px 20px}
-  .keyrow{display:flex;gap:10px}
-  .keyrow input{flex:1}
+  .settings-body{padding:0 20px 18px}
+  .keyrow{display:flex;gap:10px}.keyrow input{flex:1}
 
-  /* mode cards */
-  .modes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
-  .mode{position:relative;display:flex;gap:14px;align-items:flex-start;border:1.5px solid var(--line);border-radius:18px;padding:16px;cursor:pointer;margin:0;
-    background:var(--field);transition:transform .15s,border-color .15s,box-shadow .15s;font-weight:400}
+  /* mode tiles */
+  .modes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+  @media (max-width:760px){.modes{grid-template-columns:repeat(2,1fr)}}
+  .mode{position:relative;display:flex;flex-direction:column;gap:6px;border:1.5px solid var(--line);border-radius:18px;padding:14px;cursor:pointer;margin:0;background:var(--field);transition:transform .15s,border-color .15s,box-shadow .15s;font-weight:400}
   .mode:hover{transform:translateY(-2px)}
   .mode input{position:absolute;opacity:0;pointer-events:none}
-  .mode .ic{width:46px;height:46px;border-radius:14px;flex:none;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);color:var(--accent)}
-  .mode b{display:block;font-size:18px;margin-bottom:2px}
-  .mode small{display:block;color:var(--muted);font-size:14.5px;line-height:1.45}
-  .mode .tick{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center}
+  .mode .ic{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);color:var(--accent);font-size:20px}
+  .mode b{display:block;font-size:16px}
+  .mode small{display:block;color:var(--muted);font-size:13px;line-height:1.4}
   .mode:has(input:checked){border-color:var(--accent);box-shadow:0 0 0 4px var(--glow);background:var(--panel)}
   .mode:has(input:checked) .ic{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent}
-  .mode:has(input:checked) .tick{background:var(--accent);border-color:var(--accent)}
-  .mode:has(input:checked) .tick::after{content:"";width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
 
-  /* input + mic */
   .inbox{position:relative}
-  textarea{min-height:230px;resize:vertical;padding:16px 16px 70px;font-size:17px;line-height:1.7}
-  .micbar{position:absolute;left:12px;right:12px;bottom:12px;display:flex;align-items:center;gap:10px;pointer-events:none}
+  textarea#input{min-height:210px;resize:vertical;padding:16px 16px 70px;font-size:17px;line-height:1.7}
+  .micbar{position:absolute;left:12px;right:12px;bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;pointer-events:none}
   .micbar > *{pointer-events:auto}
-  #micBtn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:10px 16px;cursor:pointer;font:inherit;font-weight:700;font-size:15px;
-    background:var(--panel);color:var(--ink);border:1.5px solid var(--line)}
+  #micBtn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:9px 14px;font-weight:700;font-size:14px;background:var(--panel);color:var(--ink);border:1.5px solid var(--line)}
   #micBtn svg{color:var(--accent)}
   #micBtn.on{background:var(--warn);border-color:var(--warn);color:#fff;animation:pulse 1.4s infinite}
   #micBtn.on svg{color:#fff}
   @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(180,74,28,.45)}70%{box-shadow:0 0 0 14px rgba(180,74,28,0)}100%{box-shadow:0 0 0 0 rgba(180,74,28,0)}}
-  #micLang{width:auto;padding:9px 12px;border-radius:999px;font-size:14.5px;background:var(--panel)}
-  #micState{color:var(--muted);font-size:14px}
-  .extra{margin-top:14px}
+  #micLang{width:auto;padding:8px 10px;border-radius:999px;font-size:13.5px;background:var(--panel)}
+  #micState{color:var(--muted);font-size:13.5px}
+  .opts{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:12px}
+  .opts label{display:inline-flex;align-items:center;gap:8px;margin:0;font-weight:600;cursor:pointer}
+  .opts input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}
+  .opts input[type=text]{flex:1;min-width:200px}
 
-  /* actions */
-  .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;align-items:center}
-  button{font:inherit;font-weight:700;border:1.5px solid var(--line);border-radius:14px;padding:12px 18px;cursor:pointer;background:var(--field);color:var(--ink);
-    display:inline-flex;align-items:center;gap:8px;transition:transform .12s, box-shadow .12s}
+  button{font:inherit;font-weight:700;border:1.5px solid var(--line);border-radius:14px;padding:11px 16px;cursor:pointer;background:var(--field);color:var(--ink);display:inline-flex;align-items:center;gap:8px;transition:transform .12s, box-shadow .12s}
   button:hover{transform:translateY(-1px)}
-  button.primary{border:0;color:#fff;font-size:18px;padding:15px 30px;border-radius:16px;
-    background:linear-gradient(135deg,var(--accent),#0b5d4b 55%,var(--accent2));box-shadow:0 10px 24px var(--glow)}
-  button.primary:disabled{opacity:.75;cursor:progress;transform:none}
+  button:disabled{opacity:.6;cursor:not-allowed;transform:none}
+  .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;align-items:center}
+  button.primary{border:0;color:#fff;font-size:18px;padding:14px 28px;border-radius:16px;background:linear-gradient(135deg,var(--accent),#0b5d4b 55%,var(--accent2));box-shadow:0 10px 24px var(--glow)}
   button.primary .spin{display:none;width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .8s linear infinite}
   button.primary.loading .spin{display:inline-block}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .bar{height:5px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:16px;display:none}
+  button.ghost{background:transparent}
+  button.tool{padding:9px 13px;font-size:14px;border-radius:999px}
+  button.tool.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .bar{height:5px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:14px;display:none}
   .bar.on{display:block}
   .bar i{display:block;height:100%;width:40%;border-radius:9px;background:linear-gradient(90deg,var(--accent),var(--accent2));animation:slide 1.3s ease-in-out infinite}
   @keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
-  #status{margin-top:10px;color:var(--muted);font-size:15px;min-height:22px}
+  #status{margin-top:10px;color:var(--muted);font-size:14.5px;min-height:22px}
   #status.err{color:var(--warn);font-weight:600}
 
   /* output */
-  .outhead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-  .outhead h2{margin:0;font-size:19px}
-  .outhead .btns{margin:0}
-  .outhead button{padding:10px 14px;font-size:14.5px}
-  iframe{width:100%;height:80vh;border:1px solid var(--line);border-radius:16px;background:#fff}
+  .outhead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .outhead h2{margin:0;font-size:18px;display:flex;align-items:center;gap:10px}
+  .vers{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+  .vers button{padding:6px 11px;font-size:13px;border-radius:999px}
+  .vers button.cur{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .toolstrip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  iframe{width:100%;height:78vh;border:1px solid var(--line);border-radius:16px;background:#fff}
+  .revise{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:14px;align-items:start}
+  @media (max-width:640px){.revise{grid-template-columns:1fr}}
+  .revise textarea{min-height:80px;padding:12px 14px}
+  .side{background:var(--soft);border:1px dashed var(--line);border-radius:16px;padding:14px 16px;margin-top:14px;white-space:pre-wrap}
+  .side.ur{font-size:18px;text-align:right;direction:rtl}
+  .side h3{margin:0 0 8px;font-size:15px;font-family:"Plus Jakarta Sans",system-ui,sans-serif;direction:ltr;text-align:left}
+  .qa{margin-top:10px;display:flex;flex-direction:column;gap:10px}
+  .qa .q{font-family:"Noto Nastaliq Urdu",serif;direction:rtl;text-align:right;font-size:18px;line-height:2}
+  .qa textarea{min-height:60px;direction:rtl;text-align:right;font-family:"Noto Nastaliq Urdu",serif;font-size:17px;line-height:1.9}
 
-  /* history */
-  #history{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
-  #history button{justify-content:flex-start;text-align:left;font-weight:600;font-size:14.5px;padding:12px 14px;border-radius:14px;line-height:1.4}
-  details.hist summary{list-style:none;cursor:pointer;font-weight:700;display:flex;align-items:center;gap:10px}
-  details.hist summary::-webkit-details-marker{display:none}
-  details.hist summary::after{content:"";margin-left:auto;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
-  details.hist[open] summary::after{transform:rotate(-135deg)}
+  /* sidebar */
+  .tabs{display:flex;gap:6px;background:var(--field);border:1px solid var(--line);border-radius:999px;padding:4px;margin-bottom:12px}
+  .tabs button{flex:1;border:0;border-radius:999px;padding:9px;background:transparent;justify-content:center}
+  .tabs button.on{background:var(--panel);box-shadow:var(--shadow)}
+  .note{border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;background:var(--field)}
+  .note .t{white-space:pre-wrap;font-size:15px;max-height:110px;overflow:auto}
+  .note .m{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+  .note .d{color:var(--muted);font-size:12.5px}
+  .note .m button{padding:6px 10px;font-size:12.5px;border-radius:999px}
+  .lib .note b{display:block;font-size:15px}
+  #noteText{min-height:90px}
+  .side-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
   .hidden{display:none !important}
-  @media (max-width:640px){
-    .modes{grid-template-columns:1fr}
-    h1{font-size:26px}
-    .seal{width:60px;height:60px;border-radius:18px}
-    .seal span{font-size:24px}
-    button.primary{width:100%;justify-content:center}
-  }
+  .mini{font-size:13px;color:var(--muted)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="hero">
-    <div class="brand">
-      <div class="seal" aria-hidden="true"><span>خاکہ</span></div>
+    <div class="wm" aria-hidden="true">خاکہ</div>
+    <div class="row">
       <div>
-        <h1>Khaka <em>Maker</em></h1>
-        <p class="tag">Idea likho, paste karo ya bolo. Urdu khaka ek click mein.</p>
+        <h1>Khaka Maker</h1>
+        <div class="ux">سوچو، بولو، خاکہ دیکھو، کہانی گھڑو</div>
+        <p>Idea likho, paste karo ya bolo. Urdu khaka, cartoon ke saath, ek click mein.</p>
       </div>
+      <button id="keyChip" class="keychip" type="button"><span class="dot"></span><span id="keyChipText">API key chahiye</span></button>
     </div>
-    <button id="keyChip" class="keychip" type="button"><span class="dot"></span><span id="keyChipText">API key chahiye</span></button>
+    <svg class="figs" width="260" height="70" viewBox="0 0 260 70" aria-hidden="true">
+      <g fill="#fff"><circle cx="40" cy="26" r="12"/><rect x="26" y="40" width="28" height="30" rx="10"/></g>
+      <g fill="#ffe3b0"><circle cx="130" cy="22" r="14"/><rect x="112" y="38" width="36" height="32" rx="12"/></g>
+      <g fill="#bff5e2"><circle cx="220" cy="27" r="11"/><rect x="208" y="40" width="24" height="30" rx="9"/></g>
+      <path d="M70 30 h40 l-6 8" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/>
+    </svg>
   </header>
 
-  <details id="setup" class="panel settings">
-    <summary>
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      Settings (API key aur model)
-    </summary>
-    <div class="settings-body">
-      <label for="key">Claude API key</label>
-      <div class="keyrow">
-        <input id="key" type="password" placeholder="sk-ant-..." autocomplete="off">
-        <button id="saveKey" type="button">Save</button>
-      </div>
-      <p class="sub">Key sirf isi computer ke browser mein save hoti hai. Ye file kisi ko bhejo to key saath nahi jati.</p>
-      <label for="ws">Workspace ID (sirf tab jab error workspace maange)</label>
-      <input id="ws" placeholder="wrkspc_... (aam tor par khali chhor do)" autocomplete="off" style="margin-bottom:14px">
-      <label for="model">Model</label>
-      <select id="model">
-        <option value="claude-sonnet-5-5">Sonnet 5.5 (default, sasta aur achha)</option>
-        <option value="claude-opus-5-5">Opus 5.5 (sab se behtar, mehnga)</option>
-        <option value="claude-haiku-5-5">Haiku 5.5 (sab se sasta)</option>
-      </select>
-    </div>
-  </details>
-
-  <section class="panel">
-    <p class="step"><i>1</i> Kya chahiye?</p>
-    <div class="modes" role="radiogroup">
-      <label class="mode"><input type="radio" name="mode" value="parcha" checked>
-        <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg></span>
-        <span><b>Chhota parcha</b><small>Jitna paste kiya, sirf wohi Urdu mein. Jaldi aur sasta.</small></span>
-        <span class="tick"></span></label>
-      <label class="mode"><input type="radio" name="mode" value="card">
-        <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/></svg></span>
-        <span><b>Poora card ka khaka</b><small>Poora CS card paste karo: hooks, body, CTA sab.</small></span>
-        <span class="tick"></span></label>
-    </div>
-
-    <p class="step"><i>2</i> Idea likho, paste karo ya bol kar likhwao</p>
-    <div class="inbox">
-      <textarea id="input" placeholder="Apna idea yahan..."></textarea>
-      <div class="micbar">
-        <button id="micBtn" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><path d="M12 18v4"/></svg><span id="micLabel">Bol kar likho</span></button>
-        <select id="micLang" aria-label="Bolne ki zabaan">
-          <option value="ur-PK">Urdu</option>
-          <option value="hi-IN">Hindi</option>
-          <option value="en-US">English</option>
+  <div class="grid">
+  <main>
+    <details id="setup" class="panel settings">
+      <summary>⚙️ Settings (API key aur model)</summary>
+      <div class="settings-body">
+        <label for="key">Claude API key</label>
+        <div class="keyrow"><input id="key" type="password" placeholder="sk-ant-..." autocomplete="off"><button id="saveKey" type="button">Save</button></div>
+        <p class="sub">Key sirf isi device ke browser mein save hoti hai, page ya link mein nahi.</p>
+        <label for="ws">Workspace ID (sirf tab jab error workspace maange)</label>
+        <input id="ws" placeholder="wrkspc_... (aam tor par khali)" autocomplete="off" style="margin-bottom:12px">
+        <label for="model">Model</label>
+        <select id="model">
+          <option value="claude-sonnet-5-5">Sonnet 5.5 (default, sasta aur achha)</option>
+          <option value="claude-opus-5-5">Opus 5.5 (sab se behtar, mehnga)</option>
+          <option value="claude-haiku-5-5">Haiku 5.5 (sab se sasta)</option>
         </select>
-        <span id="micState"></span>
+        <div class="side-actions" style="margin-top:12px"><button id="backup" type="button">Backup (notes + khake)</button><button id="restoreBtn" type="button">Restore</button><input id="restoreFile" type="file" accept="application/json" class="hidden"></div>
       </div>
-    </div>
-    <div class="extra">
-      <label for="extra">Koi khaas hidayat (optional)</label>
-      <input id="extra" placeholder="misaal: sirf Hook 2">
-    </div>
+    </details>
 
-    <div class="btns">
-      <button id="go" class="primary" type="button"><span class="spin"></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg><span id="goLabel">Khaka banao</span></button>
-      <button id="stop" type="button" class="hidden">Roko</button>
-      <button id="clear" type="button">Saaf karo</button>
-    </div>
-    <div id="bar" class="bar"><i></i></div>
-    <div id="status"></div>
-  </section>
+    <section class="panel">
+      <p class="step"><i>1</i> Kya banana hai?</p>
+      <div class="modes" role="radiogroup">
+        <label class="mode"><input type="radio" name="mode" value="idea" checked><span class="ic">💡</span><b>Idea ka khaka</b><small>Chhota idea, sirf wohi, saaf Urdu mein, tasveeron ke saath.</small></label>
+        <label class="mode"><input type="radio" name="mode" value="card"><span class="ic">🗂️</span><b>Poora card</b><small>Poora CS card paste karo: hooks, body, CTA.</small></label>
+        <label class="mode"><input type="radio" name="mode" value="story"><span class="ic">🎬</span><b>Kahani banao</b><small>Idea se Nuflos dhanche par poori kahani ka masooda.</small></label>
+        <label class="mode"><input type="radio" name="mode" value="parcha"><span class="ic">📄</span><b>Parcha</b><small>Jo likha hai bas wohi, as-is Urdu, kuch phailana nahi.</small></label>
+      </div>
 
-  <section id="outPanel" class="panel hidden">
-    <div class="outhead">
-      <h2>Aap ka khaka</h2>
+      <p class="step"><i>2</i> Idea likho, paste karo ya bol kar likhwao</p>
+      <div class="inbox">
+        <textarea id="input" placeholder="Apna idea yahan..."></textarea>
+        <div class="micbar">
+          <button id="micBtn" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><path d="M12 18v4"/></svg><span id="micLabel">Bol kar likho</span></button>
+          <select id="micLang"><option value="ur-PK">Urdu</option><option value="hi-IN">Hindi</option><option value="en-US">English</option></select>
+          <button id="saveNote" type="button" class="tool">＋ Note mein rakho</button>
+          <span id="micState"></span>
+        </div>
+      </div>
+      <div class="opts">
+        <label><input id="cartoon" type="checkbox" checked> Cartoon tasveeren</label>
+        <input id="extra" type="text" placeholder="Khaas hidayat ya kahani ki direction (optional)">
+      </div>
       <div class="btns">
-        <button id="openTab" type="button">Naye tab mein kholo</button>
-        <button id="download" type="button">HTML download</button>
-        <button id="print" type="button">Print / PDF</button>
+        <button id="go" class="primary" type="button"><span class="spin"></span><span id="goLabel">✨ Banao</span></button>
+        <button id="stop" type="button" class="hidden">Roko</button>
+        <button id="clear" type="button" class="ghost">Saaf karo</button>
       </div>
-    </div>
-    <iframe id="out" title="Khaka"></iframe>
-  </section>
+      <div id="bar" class="bar"><i></i></div>
+      <div id="status"></div>
+    </section>
 
-  <details class="panel hist">
-    <summary>Pichle khake (isi computer par)</summary>
-    <div id="history" style="margin-top:14px"></div>
-  </details>
+    <section id="outPanel" class="panel hidden">
+      <div class="outhead">
+        <h2>📜 <span id="outTitle">Aap ka khaka</span></h2>
+        <div class="toolstrip">
+          <button id="copyText" class="tool" type="button">📋 Copy text</button>
+          <button id="speak" class="tool" type="button">🔊 Sun kar parho</button>
+          <button id="openTab" class="tool" type="button">↗ Naye tab</button>
+          <button id="download" class="tool" type="button">⬇ HTML</button>
+          <button id="print" class="tool" type="button">🖨 PDF</button>
+        </div>
+      </div>
+      <div id="vers" class="vers"></div>
+      <iframe id="out" title="Khaka"></iframe>
+
+      <div class="toolstrip" style="margin-top:14px">
+        <button id="askQ" class="tool" type="button">❓ Mujh se sawal poocho</button>
+        <button id="flaws" class="tool" type="button">🔍 Jhol dikhao</button>
+        <button id="mkStory" class="tool" type="button">🎬 Is se kahani banao</button>
+        <button id="enSum" class="tool" type="button">🇺🇸 English khulasa (copy)</button>
+      </div>
+      <div class="revise">
+        <textarea id="revText" placeholder="Badlo: misaal 'villain ko bhai bana do', 'hook Thanksgiving dinner par le jao', 'payoff mein biwi pehchan na paye'"></textarea>
+        <div style="display:flex;flex-direction:column;gap:8px"><button id="revise" type="button">✏️ Badlo</button><button id="revMic" type="button" class="tool">🎤</button></div>
+      </div>
+      <div id="sidePanel" class="side ur hidden"></div>
+      <div id="qaPanel" class="hidden">
+        <div class="side"><h3>Aap ke jawab</h3><div id="qaList" class="qa"></div>
+        <div class="side-actions"><button id="qaApply" type="button">✅ Jawab shamil kar ke dobara banao</button><button id="qaClose" type="button" class="ghost">Band karo</button></div></div>
+      </div>
+    </section>
+  </main>
+
+  <aside>
+    <section class="panel">
+      <div class="tabs"><button id="tabNotes" class="on" type="button">📝 Notes</button><button id="tabLib" type="button">📚 Khake</button></div>
+      <div id="notesPane">
+        <textarea id="noteText" placeholder="Naya idea ya note..."></textarea>
+        <div class="side-actions"><button id="addNote" type="button">＋ Save</button><span class="mini" id="noteCount"></span></div>
+        <div id="notes" style="margin-top:12px"></div>
+      </div>
+      <div id="libPane" class="hidden lib">
+        <p class="mini">Har khaka apne versions ke saath isi device par save rehta hai. Backup Settings mein.</p>
+        <div id="lib"></div>
+      </div>
+    </section>
+  </aside>
+  </div>
 </div>
 
 <script type="text/plain" id="sys">
-Tum "Nuflos Idea Urdu Khaka" bana rahe ho. Output hamesha SIRF ek mukammal, self-contained HTML document ho: pehla character "<!doctype html>" se shuru, aakhri "</html>". Koi markdown fence nahi, HTML se pehle ya baad koi baat nahi, koi sawal nahi. Input ghair wazeh ho to sab se munasib mode chun lo aur page ke upar ek chhoti line mein likh do kaun sa mode liya.
+Tum Asif ke liye "Nuflos Idea Urdu Khaka" tool ho. Asif Nuflos (US supplement brand) ke liye 9:16 Meta video ads ka Creative Strategist hai; wo apna idea Roman Urdu, Urdu, Hindi ya English mein deta hai, aur tum use Urdu page mein dikhate ho taake wo aasani se parh sake. Tum idea ko behtar banane ki koshish nahi karte, jab tak task saaf na kahe. Em dash (—) kabhi nahi, kisi bhi zabaan mein; comma, full stop ya brackets.
 
-Maqsad: Nuflos ka koi idea, poora CS card/brief, ya koi bhi ek hook/beat/paragraph, ek khoobsurat, parhne mein aasan Urdu page mein badalna. Urdu text HTML mein hai, kisi image mein nahi, is liye font hamesha sahi render hota hai.
+===== A. NUFLOS MEMORY (ye hamesha yaad rakho) =====
 
-0. Audience: hamesha US (sab se aham rule)
-- Ye ads Meta par America ke log dekhte hain: zyada tar 40 se 70 saal ke aam American mard aur aurtein. Kahani ki duniya hamesha American hai. Sirf samjhane wali zabaan (narrative, labels, wazahat) Urdu hai, kyunki parhne wala Pakistan mein hai.
-- Naam American (Mike, Linda, Dale, Karen, Tyler waghaira), jagahen American (suburb ka ghar, front porch, driveway, diner, church, high school gym, Walmart jaisi dukaan bina brand naam, office, bowling alley, backyard BBQ), mauqe American (Thanksgiving, Christmas, Fourth of July, Super Bowl party, high school reunion, prom, baby shower, wedding reception, Sunday church).
-- Rishte aur riwaj American: shaadi pasand ki hoti hai, divorce aur dobara shaadi aam hai, ex-husband/ex-wife, stepdad, girlfriend/boyfriend, bachche 18 par ghar chhor dete hain, saas sasur saath nahi rehte. Rishta (arranged marriage), joint family, jahez, mehndi, biradari, "log kya kahenge" wala izzat ka dabao, chai, roti, salan, rupay, cricket, masjid ya koi desi andaz kahani mein nahi.
-- Dialogue (English quotes) natural American English mein, jaise US ka aam aadmi bolta hai; Pakistani English ya desi muhavre ka lafzi tarjuma nahi. Paisa dollars mein, wazan pounds mein, lambai feet/inches mein, mausam Fahrenheit mein.
-- Agar input (khaas kar bola hua Urdu ya Hindi idea) mein koi desi cheez ho, to kahani ka asal zakhm, rishta aur anjaam wahi rakho, magar us cheez ko sab se qareeb American roop mein dikhao (misaal: mehndi > bridal shower, rishta dekhne aaye > first date ya family dinner, saas ka taana > mother-in-law Thanksgiving par). Har aisi tabdeeli page par ek chhoti patti mein likho: "US ke hisaab se: <asal> > <American roop>". Is ke ilawa koi naya plot point mat jodo.
-- Parhne wala Pakistan mein hai, is liye har American cheez jo use ajeeb lage (tailgate, potluck, HOA, Little League) us ki chhoti Urdu wazahat do (section 3).
+Product: Nuflos Lymphatic Drainage Drops. Chhoti amber bottle, kala cap, cream label "LYMPHATIC DRAINAGE", side par "NUFLOS". Liquid bohot gehra bhoora, taqreeban kala, gaarha jaise sheera; pani mein mila kar pani saaf surkhi mail amber ho jata hai jaise tez chai. Kabhi peela ya sunehra nahi. Usage sirf: "A few drops in any drink." (scoop, spoon, dropper, dose ka waqt, taste ki koi baat nahi). Paanch herbs: Cleavers (waste sweep karta hai), Prickly Ash (circulation restart), Burdock (sab chalta rakhta hai), Red Clover (soojan thandi karta hai), Calendula (skin saaf). Brand line: "It's called Nuflos. They make it in small batches and it sells out constantly." Six week promise lafz ba lafz: "Give it six weeks. By week one your face deflates. By week three your jawline is back. By week six you won't recognize yourself." Offer: up to 70% off, as low as $18 a bottle, thirty-day money-back guarantee; koi deadline nahi ("sale ends tonight" kabhi nahi). Proof: 250,000+ customers, 4.7 stars. Kabhi nahi: "Made in the USA", cure, kisi dawa ka brand naam (GLP-1 sirf "The shot?" / "No shot."), taste.
 
-Teen modes:
-- Idea mode (default): input ek idea hai (idea-generator ka output ya ek paste ki hui situation). Layout section 5A.
-- Card mode: input ek poora CS card/brief hai (PROPERTIES, 3 hooks, AD SCRIPT table wala). Pehchaan: PROPERTIES block, Hook 1/2/3 rows, AD SCRIPT table, ya user kahe "card ka khaka". Layout 5B.
-- Parcha mode: user ek makhsoos tukra Urdu mein as-is parhna chahta hai (ek hook, ek beat, ek paragraph). Layout 5C. Is mode mein poora khaka nahi banta, sirf wo tukra.
+Angle lines (messenger bolta hai, hook mein kabhi nahi): "That's not fat. That's trapped waste." / "You're not fat. You're backed up." / "You don't have alcohol weight. You have alcohol sludge." (sharab wali kahani) / "Since menopause your body stopped draining it. That's sludge, not fat." (aurat 45+). Mechanism ek line: "After forty, stress slows the lymphatic system; it has no pump, so the waste it should drain just sits there and hardens: under your jaw, in your gut, behind your eyes. You can't burn it, you have to drain it. And it never shows on a lab, that's why your doctor found nothing."
 
-Sab se bara rule: khaka basic se samjhata hai. Parhne wala idea pehli baar dekh raha hai: use pata nahi kaun shohar hai, kaun biwi, kaun villain, kis ne kya dekha. Shorthand fragments kabhi kafi nahi; poore jumle, poora context. Card mode mein AD SCRIPT ki har beat Urdu mein is tarah likho ke dekhe baghair samajh aa jaye scene mein kya hota hai. (Parcha mode is rule se bahar: wahan as-is tarjuma, phailana nahi.)
+Ad ki shakal: 9:16, 4:30 se 5:30 lambi, Realistic Film (asli jaise log). Teen alag hooks (30 se 45 s, alag jagah, alag pehla frame, wahi zakhm) + ek saanjhi body. Body teeno hooks ke baad chalti hai, is liye body ki koi line sirf ek hook ki baat na kare; sirf payoff Hook 1 ki jagah aur log dohrata hai.
 
-1. Input
-- Khud kuch invent mat karo: jo fields input mein nahi hain, un ka section page par mat banao. Kahani ko qadam ba qadam phailana invent karna nahi hai, wo lazmi hai; naye plot points add karna invent karna hai.
-- Ek se zyada ideas hon to har idea ka apna section; 3 se zyada hon to upar ek chhota index (anchor links). Card mode mein ek page par ek hi card.
+Kahani ka dhancha (isi tarteeb mein):
+1. HOOK: live scene jahan zakhm pehchaan ya rishta torta hai. Villain Hook 1 mein mojood aur bolta hai. Gawah mojood (log hanste hain, phone par film karte hain). Aakhir mein hold (protagonist chup, nazrein neechi, 3 se 4 s) phir ek exit action (gaadi start, darwaza band) jo bridge tak le jaye. Har hook ki pehli cheez confession caption: screen par pehle shakhs mein 6 se 12 lafz ("My husband introduced me as the help.").
+2. BRIDGE (5 se 10 s): nayi jagah, usi raat ya saaf TEXT card (THE NEXT MORNING); hook ke baad waqt mein jump nahi.
+3. REFLECTION (15 se 20 s): protagonist akela, ek cheez ya yaad jo pyar dikhaye (purani video, fridge par drawing). Yahin SACRIFICE LINE: us ne in logon ke liye kya chhora ("I gave you 25 years" ka apna roop). Mard: aankhein geeli, aansu nahi girta. Aurat: khule aansu allowed.
+4. DECISION (5 se 10 s): us shakhs ki khatir badalne ka faisla, apni khatir nahi.
+5. FAILED PATHS (15 se 20 s): 4 se 8 hafte jo khud kiya aur nahi chala (gym, diet, doctor "Nothing here I'd worry about."); kabhi months nahi.
+6. MESSENGER (2 rows, ek jagah, ek position): living proof, purana dost, purana colleague ya naya padosi; fit from first frame; credibility line + saboot (purani photo, purani belt); phir angle line + mechanism. Rishtedar (beta, beti, bhai, behen) messenger nahi; trainer ya doctor nahi.
+7. PRODUCT (2 rows, wahi jagah): bottle haath ki pahunch se aati hai; label parhna; ek objection naye lafzon mein; herbs; brand line; usage line; six weeks promise.
+8. FIRST DOSE (optional): ally pehli dose deta hai.
+9. TRANSFORMATION (TEXT: WEEK 1, WEEK 3, WEEK 6): har week kisi doosre shakhs ka reaction; kam az kam do alag log. Villain beech mein kam az kam do dafa zinda rahe (ek mulaqat, ek text ya door se dikhna).
+10. PAYOFF (2 parts): (a) WEEK SEVEN ya MONDAY: Hook 1 ki jagah aur log, apne log use dekhte hain; MIRROR LINE: Hook 1 ki ek line kisi doosre ke munh se ulte matlab mein ("We're at capacity" ab use kaha jata hai). Pehle 2 se 3 chhote gawah (coworker, darzi, parosi) phir bara lamha. (b) WEEK EIGHT / MONTHS LATER: villain ka anjaam: haara, bena-qaab ya khamosh; protagonist pursukoon, badla nahi.
+11. CTA (second convert): ek naya skeptic (parosi, chhota colleague) viewer ke 2 se 3 sawal poochta hai ("All it took was six weeks?", "And a bottle does what the gym didn't?"); protagonist angle line se jawab deta hai; phir offer (small batches, up to 70% off, as low as $18 a bottle, thirty-day money-back, "Order it now."); skeptic phone par tap kar ke "I'm ordering right now."
 
-2. Content map
-- Idea mode (jo fields input mein hain): Title, Score, Story Bucket, Who Transforms, Kahani (ek line), Zakhm, Villain, Ally, Messenger, Hook mechanic, Hook 1, Confession caption, Mirror line, Qurbani, Payoff (a) aur (b), CTA skeptic, Kyun naya hai, Kyun spend karega, Angle / Symptom / Archetype.
-- Card mode: PROPERTIES (Angle, Story, Mass Desire, Symptom, Archetype, Test Hypothesis, Ad Format), NOTES ki teen lines (Pain Point, Root Cause, Mechanism), Characters, Hook 1/2/3 (har ek ki confession caption, wound line, scene), AD SCRIPT ki body beats tarteeb se (bridge, reflection + sacrifice line, decision, failed paths, messenger 1 aur 2, product 1 aur 2, first dose, transformation weeks, payoff a aur b, CTA), mirror line, proof beats (agar card mein hain to highlight), PRODUCTION NOTES se Villain/Ally/Messenger ke naam aur LENGTH. Meta texts page par nahi.
-- Parcha mode: sirf diya hua tukra, usi tarteeb mein. Koi aur section nahi.
+Rishte: ALLY (zakhm ke baad se saath: beta, beti, partner, purana dost) aur MESSENGER (living proof, baad mein milta hai) do alag log. VILLAIN: jo chunta hai, taunt karta hai ya pehchanne se inkar karta hai; Hook 1 aur payoff dono mein; card mein lafz "villain" nahi, plain role ("Dana, his wife").
 
-3. Zabaan aur wazahat
-- Saari narrative aur labels asli Urdu script mein (Roman Urdu nahi). Labels: Kahani = کہانی، Zakhm = زخم، Qurbani = قربانی، Mirror line = آئینہ لائن، Payoff = انجام، Kyun naya hai = نیا کیوں ہے، Kyun spend karega = اسپینڈ کیوں لے گا۔ Card beats: Bridge = پل (برج)، Reflection = غور و فکر، Decision = فیصلہ، Failed paths = ناکام کوششیں، Messenger = میسنجر، Product = پروڈکٹ، First dose = پہلی خوراک، Transformation = تبدیلی، CTA = سی ٹی اے۔
-- English hi rahen ge, LTR span mein: quotes ke andar dialogue lines, Confession caption, mechanism/stock text, MindGod/Notion values (Story Bucket, Who Transforms, Angle, Symptom, Archetype, Mass Desire, Test Hypothesis), score numbers, card numbers (P003#744), TEXT cards (WEEK 1, WEEK SEVEN).
-- Har English dialogue line ke saath us ka Urdu matlab brackets mein ya agli line par. Card mode mein har beat ki chubhti hui ya ahem lines (wound line, mirror line, sacrifice line, skeptic ke sawal) ka tarjuma lazmi, baqi ka khulasa Urdu mein. Parcha mode mein HAR line ka tarjuma lazmi.
-- Har ghair maanoos ya US cultural term ki wazahat apne chhote box ya bracket mein (mariachi, tailgate, euchre waghaira); parhne wala Pakistan mein betha hai.
-- Technical terms ki ek line wazahat jahan pehli baar aayen: mirror line, CTA skeptic, confession caption, proof beat.
-- Har English inline text ko <span dir="ltr" class="en">...</span> mein lapeto.
-- Em dash (—) kahin nahi, Urdu text mein bhi nahi; comma, full stop ya brackets.
-- Score ke saath kabhi "will perform" ya "winner" nahi; score andaza hai, ye page par likho.
+Zakhm ki qismein (hook ke liye): (W1) koi qareebi protagonist ko pehchanta nahi ("Excuse me, sir."); (W2) partner kisi fit shakhs ko chunta hai ya replacement ke saamne use chhota karta hai ("She helps out at the house."); (W3) bachcha us ke saath dikhne mein sharminda; (W4) koi use bara samajhta hai (dada, biwi ka baap, pregnant). Sirf taunt ("big man") kaafi nahi.
 
-4. Design
-- <html dir="rtl" lang="ur">. Google Fonts se Noto Nastaliq Urdu (<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Archivo:wght@400;600&display=swap" rel="stylesheet">); English spans ke liye Archivo ya system sans.
-- Nastaliq ko saans chahiye: body font-size 18 se 19px (parcha mode mein 20 se 21px), line-height 2.2 se 2.4, headings par bhi kam az kam 1.9. Urdu par kabhi italic ya letter-spacing nahi.
-- Mobile-first: ek column, max-width ~820px beech mein, 16px gutters, horizontal scroll bilkul nahi.
-- Color tokens :root par, body ka background explicit; dark mode @media (prefers-color-scheme: dark) mein tokens badal kar. Look: saaf, warm; har section apna card (rounded, halki border). Saari CSS page ke andar <style> mein; koi external script nahi.
+Story buckets (MindGod ke naam, Urdu matlab ke saath): Cheating Partner (پارٹنر کی بے وفائی), Failed to Protect (اپنوں کو بچا نہ سکا), Partner Rejection (پارٹنر کا ٹھکرانا), Family Betrayal (خاندان کا دھوکہ), Shame in Public (لوگوں کے سامنے ذلت), Unwanted at Home (گھر میں غیر ضروری), Hiding From Myself (خود سے چھپنا), Secret Revealed (راز کھلنا), Caregiver Burden (سب کا بوجھ اٹھانا), Lost Attraction (کشش ختم), Intimacy Shame (قربت کی شرم), Health Decline (صحت گرنا). Who Transforms: Man Own Story, Woman Own Story, Man Told By Others, Woman Told By Others.
 
-5A. Idea mode layout (isi tarteeb mein)
-1. Header: Title bara (Nastaliq), chips (Score, Story Bucket, Who Transforms, TEST label agar ho), aur "ek jumle mein" kahani jo bina naam ke bhi samajh aaye.
-2. کردار کون کون ہیں: har kirdar ka card: مرکزی کردار, بیوی/شوہر, ولن, اتحادی, میسنجر. Role ka label, naam (English naam bracket mein), 1 se 2 jumle: ye kaun hai aur kahani mein is ka kaam. Protagonist aur partner ka rishta saaf (kaun shohar, kaun biwi).
-3. پوری کہانی، قدم بہ قدم: 6 se 10 numbered steps, poore jumlon mein: pas manzar, hook ka lamha, gawah kaun hain aur kis ne kya dekha (lazmi), protagonist ka self-blame, messenger ka milna (product wala hissa card mein aayega, hook mein nahi), transformation, dono payoff.
-4. Hook scene box (sketch ke saath): sketch ke neeche ek paragraph jo tasveer samjhaye, wound line English quote highlight mein, hook mechanic ki ek line, phir confession caption strip (caption + matlab).
-5. آئینہ لائن block: pehle ek line ke mirror line kya hoti hai, phir hook wali line (kaun bolta hai) → payoff mein ulti line (kaun bolta hai), dono English quotes.
-6. قربانی: ek line ka quiet block, aur ye ke jism isi qurbani mein bigra, susti mein nahi.
-7. انجام timeline: do steps, (a) WEEK label ke saath (apne log dekhte hain), (b) MONTHS LATER / ONE YEAR LATER (villain ka anjaam), poore jumlon mein; neeche payoff sketch aur us ki ek line wazahat.
-8. CTA سکیپٹک box: ek line ke CTA skeptic kya hota hai, phir kaun poochta hai + English question + Urdu matlab.
-9. Footer: نیا کیوں ہے aur اسپینڈ کیوں لے گا chhoti text mein, phir Angle / Symptom / Archetype chips.
+5 SECOND HOOK RULE (sab se aham, viewer ko pehle 5 second mein rokna hai): pehla frame pehle se beech ke lamhe mein (koi kisi ki taraf ja raha hai, gale mil raha hai, haath badh raha hai, phone upar hai); koi establishing shot, andar aana, salam dua, ta'aruf ya taqreeb ki shuruat nahi; takrao 2 s ke andar dikhe; chubhne wali line 3 se 5 s ke andar; pehli boli line ya to ghalti hai ya zakhm; hook kabhi khushi, jeet ya surprise se nahi khulta; pehle frame mein visual contrast (protagonist fit shakhs ke saath, purani photo aaj ke chehre ke saamne, haath mein wo cheez jo us shakhs ke liye thi). Self-test: sirf pehle 5 second bina awaz dekh kar pata chalta hai ke kuch ghalat ho gaya? Nahi to hook kamzor hai.
 
-5B. Card mode layout
-1. Header: card ka title (Story line Urdu mein) bara, chips: P003#___, Ad Format, Angle, Mass Desire, Standard/Short aur total lambai (LENGTH se). Neeche "ek jumle mein" poori kahani.
-2. کردار کون کون ہیں: Characters section se: protagonist (BEFORE/AFTER ek line), partner, villain, ally, messenger, CTA ka naya skeptic. Roles PRODUCTION NOTES ki Villain/Ally/Messenger lines se.
-3. NOTES ki teen lines: Pain Point, Root Cause, Mechanism, English mein + ek line Urdu matlab.
-4. Hooks, har hook ka box (Short mein sirf Hook 1): confession caption (English + matlab), scene ka Urdu khulasa 3 se 5 jumle (jagah, kaun kya karta hai, gawah kaun, wound line English quote highlight + matlab), aakhir mein hold/exit ek line. Sirf Hook 1 ke box ke upar sketch.
-5. باڈی کی ٹائم لائن: body beats tarteeb se, vertical timeline, har beat apna chhota card: Urdu naam, 2 se 4 jumle khulasa, ahem English line quote + matlab. Sacrifice line, mirror line aur proof beats alag rang ki patti ya chip se (label: ثبوت کا لمحہ). Transformation mein WEEK 1/3/6 English chips.
-6. آئینہ لائن block (idea mode jaisa).
-7. CTA box: naya skeptic kaun, us ke 2 se 3 sawal English + matlab, offer ka ek line khulasa Urdu mein.
-8. Footer: Test Hypothesis English + ek line Urdu matlab, phir Symptom / Archetype / Awareness chips. Ek line: "یہ خاکہ ریویو کے لیے ہے؛ Notion میں اصل English کارڈ ہی پیسٹ ہوتا ہے۔"
+Screen ka sach (jhol yahin se dhoondo): character sirf wohi jaanta hai jo screen par bataya gaya; har cheez (prop) pehle dikhe phir istemal ho, do dafa na aaye; rishta (ex-husband, stepdad) Hook 1 ke pehle 10 s mein saaf ho; koi line kisi aisi baat ka jawab na de jo kahi nahi gayi; har setup ka payoff aur har bari payoff line ka setup; hook ke baad waqt mein jump nahi; timeline ka hisaab mile (failed paths 4 se 8 hafte + Nuflos 6 hafte); payoff mein jo cheez aaye (gaari, suit, log) pehle body mein dikh chuki ho.
 
-5C. Parcha mode layout
-1. Chhota header: ek line ka title (misaal: "Hook 2 کا پرچہ"); card/idea number maloom ho to chip.
-2. Asal matn, as-is: diya hua text jumla ba jumla asli Urdu script mein, usi tarteeb mein, kuch kaata nahi, kuch jora nahi, koi khulasa nahi. Stage directions Urdu mein; dialogue English quote + har quote ke neeche Urdu matlab; TEXT cards English chips. Font 20 se 21px.
-3. Ikhtitami line: "as-is ترجمہ؛ اصل English متن ہی کارڈ میں جاتا ہے۔"
-4. Koi kirdar cards, timeline ya sketch nahi.
+Safety aur Meta: pet par koi close shot nahi (seatbelt ke bahane bhi nahi); scale, tape, pinch nahi; violence shove se zyada nahi; bachche kabhi khatre mein nahi; hook mein jinsi ishara nahi; nudity nahi; sharam wale lafz ("disgusting", "I hate my body") hero ke munh se nahi; koi asli brand, school, team ya shakhs ka naam nahi; kisi character ka naam Rick nahi; lottery ya gambling selling point nahi.
 
-6. Images
-- Sirf inline SVG sketches. Idea mode: hook scene aur payoff; card mode: sirf Hook 1 aur payoff (a); parcha: koi nahi. Simple flat sketch: silhouettes, props, jagah ka ishara. Koi real face, brand, logo ya copyrighted character nahi. Har sketch ke saath ek line text mein ke tasveer mein kya hai.
+===== B. AUDIENCE: HAMESHA US =====
+Ye ads Meta par America ke 40 se 70 saal ke aam log dekhte hain. Kahani ki duniya hamesha American; sirf samjhane wali zabaan Urdu hai kyunki parhne wala Pakistan mein hai. Naam American (Mike, Linda, Dale, Karen); jagahen American (suburb ka ghar, front porch, driveway, diner, church, high school gym, office, bowling alley, backyard BBQ, dukaan bina brand naam); mauqe American (Thanksgiving, Christmas, Fourth of July, Super Bowl party, reunion, prom, baby shower, wedding reception). Rishte American: pasand ki shaadi, divorce aur dobara shaadi aam, ex-husband, stepdad, girlfriend/boyfriend, bachche 18 par ghar chhor dete hain, saas sasur saath nahi rehte. Rishta (arranged), joint family, jahez, mehndi, biradari, "log kya kahenge", chai, roti, rupay, cricket, masjid ya koi desi andaz kahani mein nahi. Dialogue natural American English; paisa dollars, wazan pounds, lambai feet, mausam Fahrenheit. Input mein desi cheez ho to asal zakhm, rishta aur anjaam wahi rakho magar cheez ko qareeb tareen American roop do (mehndi > bridal shower; rishta dekhne aaye > family dinner; saas ka taana > mother-in-law at Thanksgiving) aur page par chhoti patti likho: "US ke hisaab se: <asal> > <American roop>". Har American cheez jo Pakistani parhne wale ko ajeeb lage (tailgate, potluck, HOA, Little League) us ki chhoti Urdu wazahat.
 
-7. Content ki hifazat
-- Ye sirf presentation layer hai. Kahani input ke beats ko phailati hai, naye beats nahi banati. Card mode mein koi dialogue line, beat ya property badalna ya chhorna nahi (sirf Meta texts page par nahi aate). Parcha mode mein ek lafz ka mafhoom bhi apni taraf se nahi badalna.
+===== C. ZABAAN AUR DESIGN (har HTML page ke liye) =====
+- Narrative aur labels asli Urdu script mein (Roman Urdu nahi). Labels: کہانی، زخم، ولن، اتحادی، میسنجر، قربانی، آئینہ لائن، انجام، سی ٹی اے سکیپٹک، ثبوت کا لمحہ، پل (برج)، غور و فکر، فیصلہ، ناکام کوششیں، پروڈکٹ، پہلی خوراک، تبدیلی۔
+- English hi rahe, <span dir="ltr" class="en">...</span> mein: dialogue quotes, confession caption, stock lines, MindGod values (Story Bucket, Who Transforms, Angle), card numbers, TEXT cards (WEEK 1). Har English dialogue ke saath Urdu matlab brackets mein ya agli line par.
+- Technical term pehli baar aaye to ek line wazahat (mirror line, CTA skeptic, confession caption, proof beat).
+- <html dir="rtl" lang="ur">; Google Fonts: <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Archivo:wght@400;600&display=swap" rel="stylesheet">; body 18 se 19px (parcha 20 se 21), line-height 2.2 se 2.4; Urdu par italic ya letter-spacing nahi; ek column, max-width 820px, 16px gutters, horizontal scroll nahi; color tokens :root par, body background explicit, dark mode @media (prefers-color-scheme: dark); har section apna card. Saari CSS <style> mein; koi external script nahi.
+- Page ke sab se upar ek chhota "copy ke liye saaf text" block NAHI banana; copy tool page se khud text nikaalta hai.
+
+===== D. TASVEEREN (inline SVG, cartoon) =====
+Default: har page par inline SVG cartoons (idea aur kahani: hook ka lamha, reflection ya qurbani, messenger se mulaqat, transformation before/after, payoff, villain ka anjaam: 4 se 6 tasveeren; card mode: Hook 1, messenger, payoff (a), payoff (b); parcha: ek). Style: flat vector cartoon, khush-rang magar narm (2 se 4 rang per scene + skin tone), gol sar, saaf simple jism, bare expressive chehre (bhavein, munh) jo jazbaat dikhayen (sharam, taana, hairat), 2 se 4 figures per scene, prop aur jagah ka ishara (porch railing, diner booth, Christmas tree), ek speech bubble mein English line (chhoti), kabhi real face, brand, logo ya copyrighted character nahi. Ek hi character har tasveer mein wahi rang (shirt, baal) rakhe taake pehchana jaye. Har SVG viewBox="0 0 640 360", width 100%, 80 elements se kam, aur neeche ek line Urdu caption ke tasveer mein kya hai. Agar user kahe "bina tasveer" to koi SVG nahi.
 </script>
 
 <script>
 (function(){
   const $ = id => document.getElementById(id);
-  const LS = {
-    get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } },
-    set(k,v){ try { localStorage.setItem(k,v); return true; } catch(e){ return false; } }
-  };
-  let lastHtml = "", controller = null;
+  const LS = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { localStorage.setItem(k,v); return true; } catch(e){ return false; } } };
+  const SYS = $("sys").textContent.trim();
+  let controller = null, currentDoc = null, curVer = -1, lastQuestions = [];
 
-  // restore settings
+  // ---------- settings ----------
   const savedKey = LS.get("kh_key"); if (savedKey) $("key").value = savedKey; else $("setup").open = true;
+  const savedWs = LS.get("kh_ws"); if (savedWs) $("ws").value = savedWs;
   const savedModel = LS.get("kh_model"); if (savedModel) $("model").value = savedModel;
   $("model").onchange = () => LS.set("kh_model", $("model").value);
-  const modeVal = () => (document.querySelector('input[name="mode"]:checked') || {}).value || "parcha";
+  function keyChip(){ const has = !!$("key").value.trim(); $("keyChip").classList.toggle("ok", has); $("keyChipText").textContent = has ? "API key lagi hui hai" : "API key chahiye"; }
+  keyChip();
+  $("keyChip").onclick = () => { $("setup").open = true; $("setup").scrollIntoView({behavior:"smooth"}); setTimeout(()=>$("key").focus(),300); };
+  $("saveKey").onclick = () => { LS.set("kh_ws", $("ws").value.trim()); const ok = LS.set("kh_key", $("key").value.trim()); status(ok ? "Key save ho gayi." : "Key save nahi hui (browser storage band hai).", !ok); keyChip(); if (ok && $("key").value.trim()) $("setup").open = false; };
+  function status(msg, err){ const s=$("status"); s.textContent = msg; s.className = err ? "err" : ""; }
+  const modeVal = () => (document.querySelector('input[name="mode"]:checked')||{}).value || "idea";
 
-  // voice input (Chrome speech recognition)
+  // ---------- mic (shared) ----------
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const savedLang = LS.get("kh_lang"); if (savedLang) $("micLang").value = savedLang;
-  $("micLang").onchange = () => { LS.set("kh_lang", $("micLang").value); if (rec) { stopMic(); startMic(); } };
-  let rec = null, baseText = "";
-  function startMic(){
+  $("micLang").onchange = () => { LS.set("kh_lang", $("micLang").value); };
+  let rec = null, baseText = "", micTarget = null, micBtnEl = null;
+  function startMic(target, btn){
     if (!SR){ $("micState").textContent = "Bolne ka option sirf Chrome mein chalta hai."; return; }
-    rec = new SR();
-    rec.lang = $("micLang").value; rec.continuous = true; rec.interimResults = true;
-    baseText = $("input").value;
-    if (baseText && !/\s$/.test(baseText)) baseText += " ";
-    rec.onresult = (e) => {
-      let fin = "", interim = "";
-      for (let i = e.resultIndex; i < e.results.length; i++){
-        const t = e.results[i][0].transcript;
-        if (e.results[i].isFinal) fin += t + " "; else interim += t;
-      }
-      if (fin) baseText += fin;
-      $("input").value = baseText + interim;
-    };
-    rec.onerror = (e) => {
-      const m = e.error === "not-allowed" ? "Mic ki ijazat nahi mili. Address bar mein mic icon se Allow karo." :
-                e.error === "no-speech" ? "Awaz nahi aayi, dobara bolo." : "Mic error: " + e.error;
-      $("micState").textContent = m;
-    };
+    micTarget = target; micBtnEl = btn;
+    rec = new SR(); rec.lang = $("micLang").value; rec.continuous = true; rec.interimResults = true;
+    baseText = target.value; if (baseText && !/\s$/.test(baseText)) baseText += " ";
+    rec.onresult = (e) => { let fin="", interim=""; for (let i=e.resultIndex;i<e.results.length;i++){ const t=e.results[i][0].transcript; if (e.results[i].isFinal) fin += t+" "; else interim += t; } if (fin) baseText += fin; target.value = baseText + interim; };
+    rec.onerror = (e) => { $("micState").textContent = e.error==="not-allowed" ? "Mic ki ijazat nahi mili. Address bar mein mic icon se Allow karo." : e.error==="no-speech" ? "Awaz nahi aayi, dobara bolo." : "Mic error: "+e.error; };
     rec.onend = () => { if (rec) { try { rec.start(); } catch(err){ stopMic(); } } };
     try { rec.start(); } catch(err){ $("micState").textContent = "Mic shuru nahi hua."; rec = null; return; }
-    $("micBtn").classList.add("on"); $("micLabel").textContent = "Bas, ruk jao";
-    $("micState").textContent = "Sun raha hoon...";
+    btn.classList.add("on"); if (btn===$("micBtn")) $("micLabel").textContent = "Bas, ruk jao"; $("micState").textContent = "Sun raha hoon...";
   }
-  function stopMic(){
-    const r = rec; rec = null;
-    if (r) { try { r.stop(); } catch(err){} }
-    $("input").value = baseText.trimEnd();
-    $("micBtn").classList.remove("on"); $("micLabel").textContent = "Bol kar likho";
-    $("micState").textContent = "";
-  }
-  $("micBtn").onclick = () => rec ? stopMic() : startMic();
+  function stopMic(){ const r = rec; rec = null; if (r) { try { r.stop(); } catch(e){} } if (micTarget) micTarget.value = baseText.trimEnd(); if (micBtnEl) micBtnEl.classList.remove("on"); $("micLabel").textContent = "Bol kar likho"; $("micState").textContent = ""; }
+  $("micBtn").onclick = () => rec ? stopMic() : startMic($("input"), $("micBtn"));
+  $("revMic").onclick = () => rec ? stopMic() : startMic($("revText"), $("revMic"));
   if (!SR) $("micState").textContent = "Bolne ka option sirf Chrome mein chalta hai.";
-  const savedWs = LS.get("kh_ws"); if (savedWs) $("ws").value = savedWs;
-  $("saveKey").onclick = () => {
-    LS.set("kh_ws", $("ws").value.trim());
-    const ok = LS.set("kh_key", $("key").value.trim());
-    status(ok ? "Key save ho gayi." : "Key save nahi hui (browser storage band hai). Har dafa paste karni hogi.", !ok);
-    keyChip();
-    if (ok && $("key").value.trim()) $("setup").open = false;
-  };
-  function keyChip(){
-    const has = !!$("key").value.trim();
-    $("keyChip").classList.toggle("ok", has);
-    $("keyChipText").textContent = has ? "API key lagi hui hai" : "API key chahiye";
-  }
-  keyChip();
-  $("keyChip").onclick = () => { $("setup").open = true; $("setup").scrollIntoView({behavior:"smooth", block:"start"}); setTimeout(()=>$("key").focus(), 300); };
 
-  function status(msg, err){ const s=$("status"); s.textContent = msg; s.className = err ? "err" : ""; }
-
-  function cleanHtml(t){
-    t = t.trim();
-    t = t.replace(/^```(?:html)?\s*/i, "").replace(/```\s*$/,"").trim();
-    const i = t.search(/<!doctype html|<html/i);
-    if (i > 0) t = t.slice(i);
-    const j = t.toLowerCase().lastIndexOf("</html>");
-    if (j > -1) t = t.slice(0, j + 7);
-    return t;
-  }
-
-  function show(html){
-    lastHtml = html;
-    $("outPanel").classList.remove("hidden");
-    $("out").srcdoc = html;
-  }
-
-  function titleOf(html, fallback){
-    const m = html.match(/<title>([^<]*)<\/title>/i);
-    return (m && m[1].trim()) || fallback;
-  }
-
-  // history
-  function loadHist(){ try { return JSON.parse(LS.get("kh_hist") || "[]"); } catch(e){ return []; } }
-  function saveHist(item){
-    let h = loadHist(); h.unshift(item); h = h.slice(0, 15);
-    while (h.length && !LS.set("kh_hist", JSON.stringify(h))) h.pop();
-    renderHist();
-  }
-  function renderHist(){
-    const box = $("history"); box.innerHTML = "";
-    const h = loadHist();
-    if (!h.length){ box.textContent = "Abhi koi khaka nahi."; return; }
-    h.forEach(it => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.textContent = it.date + " · " + it.title;
-      b.onclick = () => { show(it.html); window.scrollTo({top: $("outPanel").offsetTop, behavior:"smooth"}); };
-      box.appendChild(b);
-    });
-  }
-  renderHist();
-
-  $("clear").onclick = () => { $("input").value = ""; $("extra").value = ""; status(""); };
-
-  $("stop").onclick = () => { if (controller) controller.abort(); };
-
-  $("openTab").onclick = () => {
-    if (!lastHtml) return;
-    const url = URL.createObjectURL(new Blob([lastHtml], {type:"text/html"}));
-    window.open(url, "_blank");
-  };
-  $("download").onclick = () => {
-    if (!lastHtml) return;
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([lastHtml], {type:"text/html"}));
-    const name = titleOf(lastHtml, "khaka").replace(/[\\/:*?"<>|]+/g, " ").trim().slice(0, 60) || "khaka";
-    a.download = name + ".html";
-    a.click();
-  };
-  $("print").onclick = () => { try { $("out").contentWindow.print(); } catch(e){ status("Print ke liye 'Naye tab mein kholo' dabao, phir Ctrl+P.", true); } };
-
-  $("go").onclick = async () => {
+  // ---------- API ----------
+  async function callClaude({task, user, maxTokens, onText}){
     const key = $("key").value.trim();
-    const text = $("input").value.trim();
-    if (!key){ $("setup").open = true; status("Pehle Settings mein API key daalo.", true); return; }
-    if (!text){ status("Pehle idea ya card paste karo.", true); return; }
-
-    if (rec) stopMic();
-    const mode = modeVal();
-    const modeMap = {
-      card: "Card mode (5B) use karo.",
-      parcha: "Parcha mode (5C) use karo: sirf jo diya hai wohi, as-is Urdu mein, chhota page. Kuch phailana nahi, koi naya section nahi. Input Urdu ya Hindi mein bola hua ho to use saaf Urdu mein likho."
-    };
-    const extra = $("extra").value.trim();
-    const userMsg = modeMap[mode] + (extra ? "\nKhaas hidayat: " + extra : "") +
-      "\n\nInput:\n<<<\n" + text + "\n>>>\n\nAb sirf mukammal HTML document likho.";
-
+    if (!key){ $("setup").open = true; throw new Error("Pehle Settings mein API key daalo."); }
     controller = new AbortController();
-    $("go").disabled = true; $("go").classList.add("loading"); $("goLabel").textContent = "Ban raha hai..."; $("bar").classList.add("on"); $("stop").classList.remove("hidden");
-    status(mode === "card" ? "Ban raha hai... (poora card 2 se 4 minute leta hai)" : "Ban raha hai... (aadha se ek minute)");
-    let out = "", inTok = 0, outTok = 0, cacheRead = 0, stopReason = "";
-    const t0 = Date.now();
+    const headers = {"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"};
+    const ws = $("ws").value.trim(); if (ws) headers["anthropic-workspace-id"] = ws;
+    const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", signal: controller.signal, headers,
+      body: JSON.stringify({ model: $("model").value, max_tokens: maxTokens, stream: true,
+        system: [{type:"text", text: SYS, cache_control:{type:"ephemeral"}}, {type:"text", text: task}],
+        messages: [{role:"user", content: user}] }) });
+    if (!res.ok){ let msg = "Error "+res.status; try { const j = await res.json(); msg += ": "+(j.error && j.error.message || JSON.stringify(j)); } catch(e){}
+      if (res.status===401) msg += " (API key ghalat hai)"; if (res.status===400 && /workspace/i.test(msg)) msg += " (Settings mein Workspace ID daalo: platform.claude.com/settings/workspaces)";
+      if (res.status===404) msg += " (model is account par nahi, Settings mein doosra chuno)"; if (res.status===429||res.status===529) msg += " (API masroof hai, thori der baad)"; throw new Error(msg); }
+    const reader = res.body.getReader(), dec = new TextDecoder(); let buf="", out="", inTok=0, outTok=0, cache=0, stop="";
+    while (true){ const {value, done} = await reader.read(); if (done) break; buf += dec.decode(value,{stream:true}); let i;
+      while ((i = buf.indexOf("\n\n")) > -1){ const chunk = buf.slice(0,i); buf = buf.slice(i+2); const line = chunk.split("\n").find(l=>l.startsWith("data:")); if (!line) continue;
+        let ev; try { ev = JSON.parse(line.slice(5).trim()); } catch(e){ continue; }
+        if (ev.type==="message_start" && ev.message && ev.message.usage){ inTok = ev.message.usage.input_tokens||0; cache = ev.message.usage.cache_read_input_tokens||0; }
+        else if (ev.type==="content_block_delta" && ev.delta && ev.delta.type==="text_delta"){ out += ev.delta.text; if (onText) onText(out); }
+        else if (ev.type==="message_delta"){ if (ev.usage) outTok = ev.usage.output_tokens||outTok; if (ev.delta && ev.delta.stop_reason) stop = ev.delta.stop_reason; }
+        else if (ev.type==="error"){ throw new Error((ev.error && ev.error.message)||"Stream error"); } } }
+    return {text: out, inTok, outTok, cache, stop};
+  }
+  function cleanHtml(t){ t = t.trim().replace(/^```(?:html)?\s*/i,"").replace(/```\s*$/,"").trim(); const i = t.search(/<!doctype html|<html/i); if (i>0) t = t.slice(i); const j = t.toLowerCase().lastIndexOf("</html>"); if (j>-1) t = t.slice(0,j+7); return t; }
+  function titleOf(html, fb){ const m = html.match(/<title>([^<]*)<\/title>/i); return (m && m[1].trim()) || fb; }
+  function busy(on, label){ $("go").disabled = on; document.querySelectorAll("#revise,#askQ,#flaws,#mkStory,#enSum").forEach(b=>b.disabled=on); $("go").classList.toggle("loading", on); $("goLabel").textContent = on ? (label||"Ban raha hai...") : "✨ Banao"; $("bar").classList.toggle("on", on); $("stop").classList.toggle("hidden", !on); if (!on) controller = null; }
+  $("stop").onclick = () => { if (controller) controller.abort(); };
+  function tokLine(r){ return "Tokens: input "+r.inTok.toLocaleString()+(r.cache?" (cache "+r.cache.toLocaleString()+")":"")+", output "+r.outTok.toLocaleString()+"."; }
 
-    try {
-      const headers = {
-        "content-type": "application/json",
-        "x-api-key": key,
-        "anthropic-version": "2023-06-01",
-        "anthropic-dangerous-direct-browser-access": "true"
-      };
-      const ws = $("ws").value.trim();
-      if (ws) headers["anthropic-workspace-id"] = ws;
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        signal: controller.signal,
-        headers,
-        body: JSON.stringify({
-          model: $("model").value,
-          max_tokens: mode === "card" ? 32000 : 8000,
-          stream: true,
-          system: [{ type: "text", text: $("sys").textContent.trim(), cache_control: { type: "ephemeral" } }],
-          messages: [{ role: "user", content: userMsg }]
-        })
-      });
-
-      if (!res.ok){
-        let msg = "Error " + res.status;
-        try { const j = await res.json(); msg += ": " + (j.error && j.error.message || JSON.stringify(j)); } catch(e){}
-        if (res.status === 401) msg += " (API key ghalat hai)";
-        if (res.status === 400 && /workspace/i.test(msg)) msg += " (Settings mein Workspace ID daalo: platform.claude.com/settings/workspaces ke ID column se, wrkspc_ se shuru hota hai)";
-        if (res.status === 404) msg += " (model naam is account par nahi chal raha, Settings mein doosra model chuno)";
-        if (res.status === 429 || res.status === 529) msg += " (API masroof hai, thori der baad dobara)";
-        throw new Error(msg);
-      }
-
-      const reader = res.body.getReader();
-      const dec = new TextDecoder();
-      let buf = "";
-      while (true){
-        const { value, done } = await reader.read();
-        if (done) break;
-        buf += dec.decode(value, { stream: true });
-        let idx;
-        while ((idx = buf.indexOf("\n\n")) > -1){
-          const chunk = buf.slice(0, idx); buf = buf.slice(idx + 2);
-          const line = chunk.split("\n").find(l => l.startsWith("data:"));
-          if (!line) continue;
-          let ev; try { ev = JSON.parse(line.slice(5).trim()); } catch(e){ continue; }
-          if (ev.type === "message_start" && ev.message && ev.message.usage){
-            inTok = ev.message.usage.input_tokens || 0;
-            cacheRead = ev.message.usage.cache_read_input_tokens || 0;
-          } else if (ev.type === "content_block_delta" && ev.delta && ev.delta.type === "text_delta"){
-            out += ev.delta.text;
-            const secs = Math.round((Date.now() - t0) / 1000);
-            status("Ban raha hai... " + out.length.toLocaleString() + " characters, " + secs + " s");
-          } else if (ev.type === "message_delta"){
-            if (ev.usage) outTok = ev.usage.output_tokens || outTok;
-            if (ev.delta && ev.delta.stop_reason) stopReason = ev.delta.stop_reason;
-          } else if (ev.type === "error"){
-            throw new Error((ev.error && ev.error.message) || "Stream error");
-          }
-        }
-      }
-
-      const html = cleanHtml(out);
-      if (!html){ throw new Error("Jawab khali aaya. Dobara try karo."); }
-      show(html);
-      const date = new Date().toLocaleString();
-      saveHist({ date, title: titleOf(html, text.slice(0, 40)), html });
-      let msg = "Khaka tayyar. Tokens: input " + inTok.toLocaleString() + (cacheRead ? " (cache " + cacheRead.toLocaleString() + ")" : "") + ", output " + outTok.toLocaleString() + ".";
-      if (stopReason === "max_tokens") msg += " Page lamba ho gaya aur adhoora reh gaya. Lamba text ho to 'Poora card ka khaka' chun kar dobara chalao.";
-      status(msg, stopReason === "max_tokens");
-      window.scrollTo({ top: $("outPanel").offsetTop, behavior: "smooth" });
-    } catch (e){
-      if (e.name === "AbortError"){
-        status("Rok diya." + (out ? " Jo bana tha wo dikha diya." : ""), true);
-        if (out) show(cleanHtml(out));
-      } else {
-        status(e.message || String(e), true);
-      }
-    } finally {
-      $("go").disabled = false; $("go").classList.remove("loading"); $("goLabel").textContent = "Khaka banao"; $("bar").classList.remove("on"); $("stop").classList.add("hidden"); controller = null;
-    }
+  // ---------- tasks ----------
+  const cart = () => $("cartoon").checked ? "Tasveeren: section D ke mutabiq cartoon SVG lagao." : "Koi SVG ya tasveer nahi.";
+  const HTMLRULE = "Output SIRF ek mukammal self-contained HTML document: pehla character <!doctype html>, aakhri </html>. Koi markdown fence, koi baat HTML se pehle ya baad, koi sawal nahi.";
+  const TASK = {
+    idea: () => HTMLRULE+" Mode: IDEA KA KHAKA. Input ek chhota idea hai. Page: (1) Title bara Nastaliq + chips (Story Bucket, Who Transforms, agar maloom ho; na ho to andaza chip 'اندازہ' label ke saath). (2) ایک جملے میں کہانی. (3) کردار کون کون ہیں: har kirdar ka card, rishta saaf. (4) پوری کہانی، قدم بہ قدم: 5 se 9 numbered steps poore jumlon mein, sirf input ki baat phailai hui; gawah kaun hain aur kis ne kya dekha. (5) Hook box: pehle 5 second mein kya dikhta hai (5 second rule ke hisaab se input ke hook ko bayan karo, naya hook mat banao), wound line English quote + matlab, confession caption agar ho. (6) آئینہ لائن agar input mein ho, warna ye section nahi. (7) انجام: (a) aur (b) jitna input mein hai. (8) Footer: jo properties input mein hain. Naye plot points mat jodo; jo cheez input mein nahi wo section mat banao. "+cart(),
+    card: () => HTMLRULE+" Mode: POORA CARD. Input ek CS card hai. Page: header (Story line Urdu mein, chips P003#, Angle, Mass Desire, LENGTH), ek jumle mein kahani, کردار (Characters se), NOTES ki teen lines English + Urdu matlab, har hook ka box (confession caption + matlab, scene ka Urdu khulasa 3 se 5 jumle, gawah, wound line quote + matlab, hold/exit), باڈی کی ٹائم لائن (har beat apna card: Urdu naam, 2 se 4 jumle, ahem English line + matlab; sacrifice line, mirror line, proof beats alag rang ki chip 'ثبوت کا لمحہ'; WEEK chips), آئینہ لائن block, CTA box (skeptic ke sawal + matlab, offer ek line), footer (Test Hypothesis + matlab, chips) aur line 'یہ خاکہ ریویو کے لیے ہے؛ Notion میں اصل English کارڈ ہی پیسٹ ہوتا ہے۔'. Koi dialogue, beat ya property badalna ya chhorna nahi (Meta texts page par nahi). "+cart(),
+    parcha: () => HTMLRULE+" Mode: PARCHA. Diya hua text jumla ba jumla asli Urdu mein, usi tarteeb mein, kuch kaata nahi, kuch jora nahi, koi khulasa nahi; stage directions Urdu, har dialogue English quote + neeche Urdu matlab; TEXT cards English chips; font 20 se 21px; aakhir mein line 'as-is ترجمہ؛ اصل English متن ہی کارڈ میں جاتا ہے۔'. Chhota header ek line. "+($("cartoon").checked ? "Sirf ek cartoon SVG upar." : "Koi SVG nahi."),
+    story: () => HTMLRULE+" Mode: KAHANI BANAO. Asif ka idea aur (agar di ho) direction lo aur Nuflos ke dhanche (memory section A) par poori kahani ka masooda Urdu mein likho: title, ایک جملے میں, کردار (naam, umar, rishta, ek line), phir scene ba scene: Hook 1, Hook 2, Hook 3 (teen alag jagahen, wahi zakhm, 5 second rule, confession caption, villain Hook 1 mein, hold aur exit), پل, غور و فکر (qurbani line), فیصلہ, ناکام کوششیں, میسنجر (credibility, angle line, mechanism), پروڈکٹ (usage, six weeks promise lafz ba lafz), تبدیلی (WEEK 1/3/6, doosron ke reactions, villain beech mein zinda), انجام (a) mirror line ke saath aur (b) villain ka anjaam, سی ٹی اے (skeptic ke sawal, offer, 'I'm ordering right now.'). Har scene mein: jagah, kaun kya karta hai, gawah, 2 se 5 ahem English dialogue lines + Urdu matlab. Asif ke idea ka zakhm, rishta aur anjaam waisa hi rakho; jo cheez us ne nahi kahi wahan dhanche ke mutabiq munasib American chunao karo aur un ko ek chhoti list 'میں نے یہ خود چنا' mein neeche likho taake Asif badal sake. Page ke upar chhoti patti: 'یہ کہانی کا مسودہ ہے، اصل آئیڈیا آصف کا ہے'. Screen ka sach aur safety rules lagao. "+cart(),
+    revise: () => HTMLRULE+" Mode: BADLO. Tumhein pichla poora HTML page aur Asif ki ek hidayat milegi. SIRF wo badlo jo hidayat kehti hai (aur jo us badlaav ki wajah se laazmi badalna pare, misaal naam ya rishta). Baqi har lafz, har section, har SVG waisa hi rakho. Page ke upar ek chhoti patti: 'ورژن <n>: <hidayat ka Urdu khulasa ek line>'. Poora naya HTML wapas do.",
+    questions: () => "Mode: SAWAL. Output sirf Urdu script mein plain text (HTML nahi, markdown nahi). Asif ke idea/khaka ko Nuflos memory (dhancha, 5 second hook rule, screen ka sach, villain, mirror line, payoff, US audience) par parho aur 3 se 5 aise sawal poocho jin ka jawab sirf Asif de sakta hai aur jo idea ko mukammal karte hain (misaal: gawah kaun hai, villain ko kaise pata chala, pehle 5 second mein kya dikhta hai, payoff mein wo kya dekhti hai, messenger kaun hai). Har sawal apni line par, number ke saath, chhota, aur bracket mein ek lafz kyun poocha. Koi jawab khud mat do, koi mashwara nahi.",
+    flaws: () => "Mode: JHOL. Output sirf Urdu script plain text (HTML nahi). Idea/khaka ko in par parkho: (1) 5 second hook rule, (2) villain Hook 1 aur payoff dono mein, (3) screen ka sach (character knowledge, props, rishta 10 s mein, setup/payoff, time jump), (4) timeline ka hisaab, (5) ally aur messenger ke rules, (6) product aur offer ke lafz, (7) safety/Meta, (8) US audience (koi desi cheez). Har jhol ek line: '• <qism>: <masla>. <ek line ka mumkin hal>'. Sirf jo waqai masla hai; theek cheezon ka zikr nahi. Kuch na mile to likho 'کوئی بڑا جھول نہیں ملا'. Khud kuch badalna nahi, sirf nishandahi.",
+    ensum: () => "Mode: ENGLISH SUMMARY. Output plain English text only (no HTML, no markdown). Summarize the idea/khaka for a Nuflos CS brief handoff in this exact shape: Story (one line) / Wound and villain / Ally and messenger / Hook 1 in 2 lines (first 5 seconds, wound line) / Mirror line / Payoff (a) and (b) / CTA skeptic / Asif's open choices (if any). Under 220 words. No em dashes. Keep every decision Asif made; invent nothing."
   };
+  const MAXTOK = { idea: 16000, card: 40000, parcha: 10000, story: 32000, revise: 40000, questions: 1500, flaws: 2500, ensum: 900 };
+
+  // ---------- library ----------
+  function loadLib(){ try { return JSON.parse(LS.get("kh_lib")||"[]"); } catch(e){ return []; } }
+  function saveLib(lib){ let ok = LS.set("kh_lib", JSON.stringify(lib)); while (!ok && lib.length){ const old = lib.filter(d=>d.id!==(currentDoc&&currentDoc.id)); if (!old.length) break; lib.splice(lib.indexOf(old[old.length-1]),1); ok = LS.set("kh_lib", JSON.stringify(lib)); } renderLib(); return ok; }
+  function newDoc(title, input, mode){ const d = {id: Date.now().toString(36), title, input, mode, date: new Date().toLocaleString(), versions: []}; const lib = loadLib(); lib.unshift(d); currentDoc = d; saveLib(lib); return d; }
+  function addVersion(label, html){ if (!currentDoc) return; currentDoc.versions.push({label, html, date: new Date().toLocaleString()}); currentDoc.date = new Date().toLocaleString(); const lib = loadLib(); const i = lib.findIndex(d=>d.id===currentDoc.id); if (i>-1) lib[i] = currentDoc; else lib.unshift(currentDoc); saveLib(lib); curVer = currentDoc.versions.length-1; showVersion(curVer); }
+  function showVersion(i){ if (!currentDoc || !currentDoc.versions[i]) return; curVer = i; const v = currentDoc.versions[i]; $("outPanel").classList.remove("hidden"); $("out").srcdoc = v.html; $("outTitle").textContent = currentDoc.title; renderVers(); }
+  function renderVers(){ const box = $("vers"); box.innerHTML = ""; if (!currentDoc) return; currentDoc.versions.forEach((v,i)=>{ const b = document.createElement("button"); b.type="button"; b.textContent = "v"+(i+1)+" · "+v.label; b.title = v.date; if (i===curVer) b.className="cur"; b.onclick = ()=>showVersion(i); box.appendChild(b); }); }
+  function renderLib(){ const box = $("lib"); box.innerHTML = ""; const lib = loadLib(); if (!lib.length){ box.innerHTML = '<p class="mini">Abhi koi khaka nahi.</p>'; return; }
+    lib.forEach(d=>{ const el = document.createElement("div"); el.className="note"; el.innerHTML = '<b></b><div class="d"></div><div class="m"><span class="mini"></span><span><button class="op" type="button">Kholo</button> <button class="del" type="button">✕</button></span></div>';
+      el.querySelector("b").textContent = d.title; el.querySelector(".d").textContent = d.date; el.querySelector(".mini").textContent = d.versions.length+" version"+(d.versions.length>1?"s":"")+" · "+(d.mode||"");
+      el.querySelector(".op").onclick = ()=>{ currentDoc = d; $("input").value = d.input||""; showVersion(d.versions.length-1); $("outPanel").scrollIntoView({behavior:"smooth"}); };
+      el.querySelector(".del").onclick = ()=>{ if (!confirm("Ye khaka delete karein?")) return; const l = loadLib().filter(x=>x.id!==d.id); if (currentDoc && currentDoc.id===d.id){ currentDoc=null; $("outPanel").classList.add("hidden"); } saveLib(l); };
+      box.appendChild(el); }); }
+  renderLib();
+
+  // ---------- notes ----------
+  function loadNotes(){ try { return JSON.parse(LS.get("kh_notes")||"[]"); } catch(e){ return []; } }
+  function saveNotes(n){ LS.set("kh_notes", JSON.stringify(n)); renderNotes(); }
+  function renderNotes(){ const box = $("notes"); box.innerHTML=""; const n = loadNotes(); $("noteCount").textContent = n.length ? n.length+" notes" : ""; if (!n.length){ box.innerHTML='<p class="mini">Yahan apne ideas note karo. Baad mein ek click se khaka.</p>'; return; }
+    n.forEach(it=>{ const el = document.createElement("div"); el.className="note"; el.innerHTML='<div class="t"></div><div class="m"><span class="d"></span><span><button class="use" type="button">💡 Khaka</button> <button class="ed" type="button">✎</button> <button class="del" type="button">✕</button></span></div>';
+      el.querySelector(".t").textContent = it.text; el.querySelector(".d").textContent = it.date;
+      el.querySelector(".use").onclick = ()=>{ $("input").value = it.text; window.scrollTo({top:0,behavior:"smooth"}); $("input").focus(); };
+      el.querySelector(".ed").onclick = ()=>{ $("noteText").value = it.text; const l = loadNotes().filter(x=>x.id!==it.id); saveNotes(l); $("noteText").focus(); };
+      el.querySelector(".del").onclick = ()=>{ saveNotes(loadNotes().filter(x=>x.id!==it.id)); };
+      box.appendChild(el); }); }
+  function addNote(text){ text = (text||"").trim(); if (!text) return; const n = loadNotes(); n.unshift({id: Date.now().toString(36), text, date: new Date().toLocaleString()}); saveNotes(n); }
+  $("addNote").onclick = ()=>{ addNote($("noteText").value); $("noteText").value=""; };
+  $("saveNote").onclick = ()=>{ addNote($("input").value); status("Note save ho gaya."); $("tabNotes").click(); };
+  renderNotes();
+  $("tabNotes").onclick = ()=>{ $("tabNotes").classList.add("on"); $("tabLib").classList.remove("on"); $("notesPane").classList.remove("hidden"); $("libPane").classList.add("hidden"); };
+  $("tabLib").onclick = ()=>{ $("tabLib").classList.add("on"); $("tabNotes").classList.remove("on"); $("libPane").classList.remove("hidden"); $("notesPane").classList.add("hidden"); };
+
+  // backup / restore
+  $("backup").onclick = ()=>{ const data = {notes: loadNotes(), lib: loadLib(), exported: new Date().toISOString()}; const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(data)],{type:"application/json"})); a.download = "khaka-backup-"+new Date().toISOString().slice(0,10)+".json"; a.click(); };
+  $("restoreBtn").onclick = ()=>$("restoreFile").click();
+  $("restoreFile").onchange = async (e)=>{ const f = e.target.files[0]; if (!f) return; try { const d = JSON.parse(await f.text()); const notes = loadNotes(), lib = loadLib(); (d.notes||[]).forEach(n=>{ if (!notes.find(x=>x.id===n.id)) notes.push(n); }); (d.lib||[]).forEach(n=>{ if (!lib.find(x=>x.id===n.id)) lib.push(n); }); saveNotes(notes); saveLib(lib); status("Restore ho gaya."); } catch(err){ status("Backup file parh nahi saki.", true); } e.target.value=""; };
+
+  // ---------- main generate ----------
+  $("clear").onclick = ()=>{ $("input").value=""; $("extra").value=""; status(""); };
+  $("go").onclick = async ()=>{
+    if (rec) stopMic();
+    const text = $("input").value.trim(); if (!text){ status("Pehle idea likho ya paste karo.", true); return; }
+    const mode = modeVal(); const extra = $("extra").value.trim();
+    const labels = {idea:"khaka", card:"card ka khaka", story:"kahani", parcha:"parcha"};
+    busy(true, "Ban raha hai..."); status(mode==="card"||mode==="story" ? "Ban raha hai... (2 se 4 minute)" : "Ban raha hai... (aadha se ek minute)");
+    const t0 = Date.now();
+    try {
+      const r = await callClaude({ task: TASK[mode](), maxTokens: MAXTOK[mode], user: (extra ? "Khaas hidayat / direction: "+extra+"\n\n" : "")+"Input:\n<<<\n"+text+"\n>>>\n\nAb sirf mukammal HTML document likho.",
+        onText: (o)=>status("Ban raha hai... "+o.length.toLocaleString()+" characters, "+Math.round((Date.now()-t0)/1000)+" s") });
+      const html = cleanHtml(r.text); if (!html) throw new Error("Jawab khali aaya.");
+      if (!currentDoc || !text.startsWith((currentDoc.input||"").trim().slice(0,200))) newDoc(titleOf(html, text.slice(0,40)), text, labels[mode]); else currentDoc.input = text;
+      addVersion(labels[mode]+(extra?" ("+extra.slice(0,30)+")":""), html);
+      status("Tayyar. "+tokLine(r)+(r.stop==="max_tokens"?" Page lamba ho kar adhoora reh gaya; chhota mode ya 'bina tasveer' try karo.":""), r.stop==="max_tokens");
+      $("outPanel").scrollIntoView({behavior:"smooth"});
+    } catch(e){ status(e.name==="AbortError" ? "Rok diya." : (e.message||String(e)), true); }
+    finally { busy(false); }
+  };
+
+  // ---------- revise ----------
+  $("revise").onclick = async ()=>{
+    if (rec) stopMic();
+    const instr = $("revText").value.trim(); if (!instr){ status("Pehle likho kya badalna hai.", true); return; }
+    if (!currentDoc || curVer<0){ status("Pehle koi khaka banao.", true); return; }
+    const prev = currentDoc.versions[curVer].html;
+    busy(true, "Badal raha hoon..."); status("Badal raha hoon... (1 se 3 minute)");
+    try {
+      const r = await callClaude({ task: TASK.revise(), maxTokens: MAXTOK.revise, user: "Version number: "+(currentDoc.versions.length+1)+"\nHidayat: "+instr+"\n\nPichla page:\n<<<\n"+prev+"\n>>>\n\nAb sirf naya mukammal HTML document likho.", onText:(o)=>status("Badal raha hoon... "+o.length.toLocaleString()+" characters") });
+      const html = cleanHtml(r.text); if (!html) throw new Error("Jawab khali aaya.");
+      addVersion("badla: "+instr.slice(0,40), html); $("revText").value=""; status("Naya version tayyar. "+tokLine(r));
+    } catch(e){ status(e.name==="AbortError" ? "Rok diya." : (e.message||String(e)), true); } finally { busy(false); }
+  };
+
+  // ---------- questions / flaws / english ----------
+  function docText(){ try { return $("out").contentDocument.body.innerText; } catch(e){ return ""; } }
+  function ctx(){ const base = (currentDoc && currentDoc.input) || $("input").value; const page = docText(); return "Asif ka idea/input:\n<<<\n"+base+"\n>>>\n"+(page ? "\nBana hua khaka (text):\n<<<\n"+page.slice(0,12000)+"\n>>>" : ""); }
+  async function textTask(kind, label, maxTokens){
+    const panel = $("sidePanel"); panel.classList.remove("hidden"); panel.innerHTML = ""; const h = document.createElement("h3"); h.textContent = label; panel.appendChild(h); const body = document.createElement("div"); panel.appendChild(body);
+    busy(true, label+"..."); status(label+"...");
+    try { const r = await callClaude({ task: TASK[kind](), maxTokens, user: ctx(), onText:(o)=>{ body.textContent = o; } }); status(label+" tayyar. "+tokLine(r)); return r.text; }
+    catch(e){ status(e.name==="AbortError" ? "Rok diya." : (e.message||String(e)), true); return ""; } finally { busy(false); }
+  }
+  $("flaws").onclick = ()=>textTask("flaws", "Jhol", MAXTOK.flaws);
+  $("askQ").onclick = async ()=>{ const t = await textTask("questions", "Sawal", MAXTOK.questions); if (!t) return;
+    lastQuestions = t.split("\n").map(s=>s.trim()).filter(s=>/^\d+[\.\)،\-]/.test(s)||/[؟?]$/.test(s)); if (!lastQuestions.length) lastQuestions = t.split("\n").filter(s=>s.trim());
+    const list = $("qaList"); list.innerHTML=""; lastQuestions.forEach((q,i)=>{ const d = document.createElement("div"); d.innerHTML='<div class="q"></div><textarea placeholder="جواب..."></textarea>'; d.querySelector(".q").textContent = q; list.appendChild(d); });
+    $("qaPanel").classList.remove("hidden"); $("sidePanel").classList.add("hidden"); };
+  $("qaClose").onclick = ()=>$("qaPanel").classList.add("hidden");
+  $("qaApply").onclick = ()=>{ const rows = [...$("qaList").children].map((d,i)=>({q: lastQuestions[i], a: d.querySelector("textarea").value.trim()})).filter(x=>x.a); if (!rows.length){ status("Koi jawab nahi likha.", true); return; }
+    const add = "\n\nAsif ke jawab (sawalon par):\n"+rows.map(x=>"- "+x.q+"\n  "+x.a).join("\n"); $("input").value = ($("input").value.trim())+add; $("qaPanel").classList.add("hidden"); $("go").click(); };
+  $("enSum").onclick = async ()=>{ const t = await textTask("ensum", "English khulasa", MAXTOK.ensum); if (t){ try { await navigator.clipboard.writeText(t.trim()); status("English khulasa copy ho gaya."); } catch(e){ status("Copy nahi hua, neeche se select kar ke copy karo.", true); } } };
+  $("mkStory").onclick = ()=>{ document.querySelector('input[name="mode"][value="story"]').checked = true; $("extra").focus(); status("Direction likho (optional) aur Banao dabao."); window.scrollTo({top:0,behavior:"smooth"}); };
+
+  // ---------- copy / speak / export ----------
+  $("copyText").onclick = async ()=>{ const t = docText(); if (!t){ status("Copy ke liye kuch nahi.", true); return; } try { await navigator.clipboard.writeText(t); status("Poora text copy ho gaya."); } catch(e){ status("Copy nahi hua.", true); } };
+  let speaking = false;
+  function pickVoice(){ const vs = speechSynthesis.getVoices(); return vs.find(v=>/^ur/i.test(v.lang)) || vs.find(v=>/^fa/i.test(v.lang)) || vs.find(v=>/^ar/i.test(v.lang)) || vs.find(v=>/^hi/i.test(v.lang)) || null; }
+  $("speak").onclick = ()=>{ if (!("speechSynthesis" in window)){ status("Is browser mein awaz nahi.", true); return; }
+    if (speaking){ speechSynthesis.cancel(); speaking=false; $("speak").classList.remove("on"); $("speak").textContent="🔊 Sun kar parho"; return; }
+    const t = docText(); if (!t) return; const v = pickVoice(); if (!v) status("Urdu awaz is device par nahi mili. Windows: Settings > Time & Language > Language mein Urdu add karo (Speech). Phir se try karo.", true); else if (!/^ur/i.test(v.lang)) status("Urdu awaz nahi mili, "+v.lang+" awaz se parh raha hoon (talaffuz kamzor ho sakta hai).");
+    speechSynthesis.cancel(); const parts = t.split(/(?<=[۔\.\!\?؟\n])\s+/).filter(s=>s.trim()); let i=0; speaking=true; $("speak").classList.add("on"); $("speak").textContent="⏹ Roko";
+    const next = ()=>{ if (!speaking || i>=parts.length){ speaking=false; $("speak").classList.remove("on"); $("speak").textContent="🔊 Sun kar parho"; return; } const u = new SpeechSynthesisUtterance(parts[i++]); if (v) u.voice = v; u.lang = v ? v.lang : "ur-PK"; u.rate = 0.95; u.onend = next; u.onerror = next; speechSynthesis.speak(u); }; next(); };
+  if ("speechSynthesis" in window) speechSynthesis.onvoiceschanged = ()=>{};
+  const curHtml = ()=> (currentDoc && currentDoc.versions[curVer]) ? currentDoc.versions[curVer].html : "";
+  $("openTab").onclick = ()=>{ const h = curHtml(); if (h) window.open(URL.createObjectURL(new Blob([h],{type:"text/html"})), "_blank"); };
+  $("download").onclick = ()=>{ const h = curHtml(); if (!h) return; const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([h],{type:"text/html"})); a.download = (titleOf(h,"khaka").replace(/[\\/:*?"<>|]+/g," ").trim().slice(0,60)||"khaka")+"-v"+(curVer+1)+".html"; a.click(); };
+  $("print").onclick = ()=>{ try { $("out").contentWindow.print(); } catch(e){ status("Print ke liye 'Naye tab' dabao, phir Ctrl+P.", true); } };
 })();
 </script>
 </body>
