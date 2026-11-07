@@ -204,6 +204,7 @@
       </div>
       <div class="opts">
         <label><input id="cartoon" type="checkbox" checked> Cartoon tasveeren</label>
+        <label title="Band karo to Nuflos aur US audience ke rules nahi lagenge; azad idea"><input id="nuflos" type="checkbox" checked> Nuflos memory</label>
         <input id="extra" type="text" placeholder="Khaas hidayat ya kahani ki direction (optional)">
       </div>
       <div class="btns">
@@ -318,7 +319,11 @@ Default: har page par inline SVG cartoons (idea aur kahani: hook ka lamha, refle
 (function(){
   const $ = id => document.getElementById(id);
   const LS = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { localStorage.setItem(k,v); return true; } catch(e){ return false; } } };
-  const SYS = $("sys").textContent.trim();
+  const SYS_FULL = $("sys").textContent.trim();
+  const SYS_GEN = "Tum Asif ke liye Urdu khaka tool ho. Asif apna idea Roman Urdu, Urdu, Hindi ya English mein deta hai aur tum use khoobsurat Urdu page mein dikhate ho. YE AZAD MODE HAI: Nuflos, supplement ads, US audience ya kisi brand ka koi rule nahi lagta; kahani ki duniya, zabaan, naam aur jagahen wahi rakho jo input mein hain (Pakistani ho to Pakistani, kahin ki bhi ho). Idea ko behtar banane ki koshish nahi, sirf saaf dikhana, jab tak task kahe. Em dash (—) kabhi nahi.\n\n" + SYS_FULL.slice(SYS_FULL.indexOf("===== C."));
+  const SYS = () => $("nuflos").checked ? SYS_FULL : SYS_GEN;
+  const savedNf = LS.get("kh_nuflos"); if (savedNf === "0") $("nuflos").checked = false;
+  $("nuflos").onchange = () => LS.set("kh_nuflos", $("nuflos").checked ? "1" : "0");
   let controller = null, currentDoc = null, curVer = -1, lastQuestions = [];
 
   // ---------- settings ----------
@@ -363,7 +368,7 @@ Default: har page par inline SVG cartoons (idea aur kahani: hook ka lamha, refle
     const ws = $("ws").value.trim(); if (ws) headers["anthropic-workspace-id"] = ws;
     const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", signal: controller.signal, headers,
       body: JSON.stringify({ model: $("model").value, max_tokens: maxTokens, stream: true,
-        system: [{type:"text", text: SYS, cache_control:{type:"ephemeral"}}, {type:"text", text: task}],
+        system: [{type:"text", text: SYS(), cache_control:{type:"ephemeral"}}, {type:"text", text: task + ($("nuflos").checked ? "" : " AZAD MODE: Nuflos ka dhancha, product, offer, US audience, story buckets, hook rule ya 5 second rule mat lagao; jahan task Nuflos ke hisse maangta hai wahan sirf wo hisse banao jo input mein hain ya aam kahani ki mantiq (shuruat, takrao, mor, anjaam) se banein.")}],
         messages: [{role:"user", content: user}] }) });
     if (!res.ok){ let msg = "Error "+res.status; try { const j = await res.json(); msg += ": "+(j.error && j.error.message || JSON.stringify(j)); } catch(e){}
       if (res.status===401) msg += " (API key ghalat hai)"; if (res.status===400 && /workspace/i.test(msg)) msg += " (Settings mein Workspace ID daalo: platform.claude.com/settings/workspaces)";
