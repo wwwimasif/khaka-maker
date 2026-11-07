@@ -139,6 +139,12 @@
   .lib .note b{display:block;font-size:15px}
   #noteText{min-height:90px}
   .side-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .filt{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .filt button{padding:5px 10px;font-size:12.5px;border-radius:999px}
+  .filt button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .st{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font:inherit;font-size:12.5px}
+  .st-queue{background:#fff3d6;color:#7a4b00;border-color:#f0d9a3}.st-approved{background:#dff5ea;color:#0b5d4b;border-color:#a9e3c9}.st-used{background:#e8e3dc;color:#6f675c;text-decoration:line-through}
+  @media (prefers-color-scheme: dark){.st-queue{background:#3a2a08;color:#f3c57a;border-color:#5a4211}.st-approved{background:#0f2b22;color:#8ff2d4;border-color:#1f5a47}.st-used{background:#2a2621;color:#a39a8c}}
   .hidden{display:none !important}
   .mini{font-size:13px;color:var(--muted)}
 </style>
@@ -165,6 +171,12 @@
 
   <div class="grid">
   <main>
+    <section id="sparkPanel" class="panel" data-tool="spark" style="padding:14px 18px">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <b>⚡ Aaj ki chingari:</b> <span id="spark" class="ur" style="font-size:19px"></span>
+        <span style="margin-left:auto;display:flex;gap:6px"><button id="sparkNew" class="tool" type="button">🔄 Nayi</button><button id="sparkNote" class="tool" type="button">＋ Note</button></span>
+      </div>
+    </section>
     <details id="setup" class="panel settings">
       <summary>⚙️ Settings (API key aur model)</summary>
       <div class="settings-body">
@@ -179,6 +191,8 @@
           <option value="claude-opus-5-5">Opus 5.5 (sab se behtar, mehnga)</option>
           <option value="claude-haiku-5-5">Haiku 5.5 (sab se sasta)</option>
         </select>
+        <label style="margin-top:14px">Kaun se tools dikhayein?</label>
+        <div id="toolToggles" class="opts" style="margin-top:4px"></div>
         <div class="side-actions" style="margin-top:12px"><button id="backup" type="button">Backup (notes + khake)</button><button id="restoreBtn" type="button">Restore</button><input id="restoreFile" type="file" accept="application/json" class="hidden"></div>
       </div>
     </details>
@@ -221,7 +235,7 @@
         <h2>📜 <span id="outTitle">Aap ka khaka</span></h2>
         <div class="toolstrip">
           <button id="copyText" class="tool" type="button">📋 Copy text</button>
-          <button id="speak" class="tool" type="button">🔊 Sun kar parho</button>
+          <button id="speak" class="tool" type="button" data-tool="speak">🔊 Sun kar parho</button>
           <button id="openTab" class="tool" type="button">↗ Naye tab</button>
           <button id="download" class="tool" type="button">⬇ HTML</button>
           <button id="print" class="tool" type="button">🖨 PDF</button>
@@ -231,16 +245,29 @@
       <iframe id="out" title="Khaka"></iframe>
 
       <div class="toolstrip" style="margin-top:14px">
-        <button id="askQ" class="tool" type="button">❓ Mujh se sawal poocho</button>
-        <button id="flaws" class="tool" type="button">🔍 Jhol dikhao</button>
-        <button id="mkStory" class="tool" type="button">🎬 Is se kahani banao</button>
-        <button id="enSum" class="tool" type="button">🇺🇸 English khulasa (copy)</button>
+        <button id="askQ" class="tool" type="button" data-tool="askq">❓ Mujh se sawal poocho</button>
+        <button id="flaws" class="tool" type="button" data-tool="flaws">🔍 Jhol dikhao</button>
+        <button id="mkStory" class="tool" type="button" data-tool="story">🎬 Is se kahani banao</button>
+        <button id="enSum" class="tool" type="button" data-tool="ensum">🇺🇸 English khulasa (copy)</button>
+        <button id="whatIf" class="tool" type="button" data-tool="whatif">💭 Kya ho agar</button>
+        <button id="score" class="tool" type="button" data-tool="score">🎯 Score card</button>
+        <button id="angles" class="tool" type="button" data-tool="angles">🔭 Alag zaviye</button>
+        <button id="compare" class="tool" type="button" data-tool="compare">🆚 Versions ka farq</button>
+        <button id="talk" class="tool" type="button" data-tool="talk">🗣 Kirdar se baat</button>
       </div>
       <div class="revise">
         <textarea id="revText" placeholder="Badlo: misaal 'villain ko bhai bana do', 'hook Thanksgiving dinner par le jao', 'payoff mein biwi pehchan na paye'"></textarea>
         <div style="display:flex;flex-direction:column;gap:8px"><button id="revise" type="button">✏️ Badlo</button><button id="revMic" type="button" class="tool">🎤</button></div>
       </div>
       <div id="sidePanel" class="side ur hidden"></div>
+      <div id="talkPanel" class="hidden"><div class="side"><h3>Kirdar se baat</h3>
+        <div class="opts" style="margin:0 0 8px"><input id="talkWho" type="text" placeholder="Kirdar ka naam (misaal: Dale)" style="max-width:220px;min-width:140px"><input id="talkQ" type="text" placeholder="Sawal (Urdu ya English): us waqt tumhein kya mehsoos hua?"><button id="talkGo" type="button">Poocho</button><button id="talkMic" class="tool" type="button">🎤</button></div>
+        <div id="talkLog" class="ur" style="font-size:18px;direction:rtl;text-align:right;white-space:pre-wrap"></div>
+        <div class="side-actions"><button id="talkClose" type="button" class="ghost">Band karo</button></div></div></div>
+      <div id="cmpPanel" class="hidden"><div class="side"><h3>Versions ka farq</h3>
+        <div class="opts" style="margin:0 0 8px"><span>Maujooda version ka muqabla:</span><select id="cmpSel" style="width:auto"></select><button id="cmpGo" type="button">Farq dikhao</button></div>
+        <div id="cmpOut" class="ur" style="font-size:18px;direction:rtl;text-align:right;white-space:pre-wrap"></div>
+        <div class="side-actions"><button id="cmpClose" type="button" class="ghost">Band karo</button></div></div></div>
       <div id="qaPanel" class="hidden">
         <div class="side"><h3>Aap ke jawab</h3><div id="qaList" class="qa"></div>
         <div class="side-actions"><button id="qaApply" type="button">✅ Jawab shamil kar ke dobara banao</button><button id="qaClose" type="button" class="ghost">Band karo</button></div></div>
@@ -250,15 +277,22 @@
 
   <aside>
     <section class="panel">
-      <div class="tabs"><button id="tabNotes" class="on" type="button">📝 Notes</button><button id="tabLib" type="button">📚 Khake</button></div>
+      <div class="tabs"><button id="tabNotes" class="on" type="button">📝 Notes</button><button id="tabLib" type="button">📚 Khake</button><button id="tabSoch" type="button" data-tool="journal">🎙 Soch</button></div>
       <div id="notesPane">
         <textarea id="noteText" placeholder="Naya idea ya note..."></textarea>
         <div class="side-actions"><button id="addNote" type="button">＋ Save</button><span class="mini" id="noteCount"></span></div>
-        <div id="notes" style="margin-top:12px"></div>
+        <div id="noteFilt" class="filt"></div><div id="notes"></div>
+      </div>
+      <div id="sochPane" class="hidden">
+        <p class="mini">Bas bolte jao, jo dil mein aaye. Phir "Ideas nikaalo" dabao, bikhri soch se 2 se 3 saaf ideas banenge.</p>
+        <textarea id="sochText" placeholder="Soch raha hoon..." style="min-height:180px"></textarea>
+        <div class="side-actions"><button id="sochMic" type="button">🎤 Bolo</button><button id="sochGo" type="button">✨ Ideas nikaalo</button><button id="sochClear" type="button" class="ghost">Saaf</button></div>
+        <div id="sochOut" class="ur" style="font-size:17px;direction:rtl;text-align:right;white-space:pre-wrap;margin-top:10px"></div>
+        <div id="sochIdeas" style="margin-top:8px"></div>
       </div>
       <div id="libPane" class="hidden lib">
         <p class="mini">Har khaka apne versions ke saath isi device par save rehta hai. Backup Settings mein.</p>
-        <div id="lib"></div>
+        <div id="libFilt" class="filt"></div><div id="lib"></div>
       </div>
     </section>
   </aside>
@@ -400,9 +434,22 @@ Default: har page par inline SVG cartoons (idea aur kahani: hook ka lamha, refle
     revise: () => HTMLRULE+" Mode: BADLO. Tumhein pichla poora HTML page aur Asif ki ek hidayat milegi. SIRF wo badlo jo hidayat kehti hai (aur jo us badlaav ki wajah se laazmi badalna pare, misaal naam ya rishta). Baqi har lafz, har section, har SVG waisa hi rakho. Page ke upar ek chhoti patti: 'ورژن <n>: <hidayat ka Urdu khulasa ek line>'. Poora naya HTML wapas do.",
     questions: () => "Mode: SAWAL. Output sirf Urdu script mein plain text (HTML nahi, markdown nahi). Asif ke idea/khaka ko Nuflos memory (dhancha, 5 second hook rule, screen ka sach, villain, mirror line, payoff, US audience) par parho aur 3 se 5 aise sawal poocho jin ka jawab sirf Asif de sakta hai aur jo idea ko mukammal karte hain (misaal: gawah kaun hai, villain ko kaise pata chala, pehle 5 second mein kya dikhta hai, payoff mein wo kya dekhti hai, messenger kaun hai). Har sawal apni line par, number ke saath, chhota, aur bracket mein ek lafz kyun poocha. Koi jawab khud mat do, koi mashwara nahi.",
     flaws: () => "Mode: JHOL. Output sirf Urdu script plain text (HTML nahi). Idea/khaka ko in par parkho: (1) 5 second hook rule, (2) villain Hook 1 aur payoff dono mein, (3) screen ka sach (character knowledge, props, rishta 10 s mein, setup/payoff, time jump), (4) timeline ka hisaab, (5) ally aur messenger ke rules, (6) product aur offer ke lafz, (7) safety/Meta, (8) US audience (koi desi cheez). Har jhol ek line: '• <qism>: <masla>. <ek line ka mumkin hal>'. Sirf jo waqai masla hai; theek cheezon ka zikr nahi. Kuch na mile to likho 'کوئی بڑا جھول نہیں ملا'. Khud kuch badalna nahi, sirf nishandahi.",
+    whatif: () => "Mode: KYA HO AGAR. Output sirf Urdu script plain text. Asif ke idea/khaka par 5 chhote 'کیا ہو اگر' sawal likho jo kahani ko naye raste dikhayen (gawah badal jaye, villain ko pehle se pata ho, payoff kisi aur jagah ho, kirdar ka rishta ulat jaye, waqt badal jaye). Har sawal ek line, number ke saath, 12 lafz se kam. Koi jawab, koi kahani, koi mashwara nahi; sirf sawal.",
+    score: () => "Mode: SCORE CARD. Output sirf Urdu script plain text. Idea/khaka ko in 5 par ek ek line mein parkho, koi number nahi: (1) زخم کتنا گہرا, (2) ولن کتنا صاف, (3) پہلے 5 سیکنڈ میں کیا دکھتا ہے, (4) انجام کتنا میٹھا (mirror line, apne log, villain ka anjaam), (5) کتنا نیا. Har line: '• <naam>: <ek jumla ke abhi kaisa hai> | <ek jumla ke kamzor ho to kahan>'. Aakhir mein ek line: 'سب سے کمزور حصہ: ...'. Khud kuch badalna nahi.",
+    angles: () => "Mode: ALAG ZAVIYE. Output sirf Urdu script plain text. Wahi idea 3 alag nazar se, har ek 3 se 4 jumle: (1) hero ka gender ya umar badal kar, (2) kahani koi aur sunaye (beta, beti, dost, 'Told By Others'), (3) villain ya gawah ki nazar se shuru ho. Asal zakhm aur anjaam wahi rahein. Har zaviye ka ek chhota title. Ye options hain, Asif chunega; koi 'ye behtar hai' nahi.",
+    compare: () => "Mode: FARQ. Output sirf Urdu script plain text. Tumhein ek khaka ke do versions ka text milega. 4 se 8 lines mein likho kya badla (kirdar, zakhm, jagah, hook, payoff, lines), har line '• <kya tha> > <kya hua>'. Phir ek line: 'بہتر ہوا: ...' aur ek line 'کھو گیا: ...' (agar kuch kho gaya ho). Koi mashwara nahi.",
+    journal: () => "Mode: SOCH SE IDEAS. Output sirf Urdu script plain text. Asif ki bikhri hui, boli hui soch milegi (Roman Urdu, Urdu ya Hindi, adhoore jumle). Us mein se 2 se 3 alag alag ideas nikaalo. Har idea: pehli line 'IDEA n: <title>' phir 2 se 3 jumle Urdu mein (kaun, kya hota hai, zakhm, anjaam agar soch mein ho). Sirf wo jo Asif ne socha; apna kuch na jodo. Ideas ke beech ek khali line.",
+    talk: () => "Mode: KIRDAR SE BAAT. Tum kahani ke ek kirdar ho (naam user message mein). Asif ke sawal ka jawab usi kirdar ki zabaan mein, pehle shakhs mein, Urdu script mein, 2 se 5 jumle, jazbaat ke saath, bina lecture ke. Sirf wo jaano jo kahani/khaka mein hai; jo nahi pata wo kirdar ki tarah 'mujhe nahi pata' kaho. Plain text, koi label nahi.",
     ensum: () => "Mode: ENGLISH SUMMARY. Output plain English text only (no HTML, no markdown). Summarize the idea/khaka for a Nuflos CS brief handoff in this exact shape: Story (one line) / Wound and villain / Ally and messenger / Hook 1 in 2 lines (first 5 seconds, wound line) / Mirror line / Payoff (a) and (b) / CTA skeptic / Asif's open choices (if any). Under 220 words. No em dashes. Keep every decision Asif made; invent nothing."
   };
-  const MAXTOK = { idea: 16000, card: 40000, parcha: 10000, story: 32000, revise: 40000, questions: 1500, flaws: 2500, ensum: 900 };
+  const MAXTOK = { idea: 16000, card: 40000, parcha: 10000, story: 32000, revise: 40000, questions: 1500, flaws: 2500, ensum: 900, whatif: 800, score: 1500, angles: 2000, compare: 1500, journal: 2000, talk: 700 };
+
+  // ---------- status (naya / queue / approved / used) ----------
+  const STATES = [["new","Naya"],["queue","Queue (baad mein)"],["approved","Approved"],["used","Use ho chuka"]];
+  const stName = k => (STATES.find(x=>x[0]===k)||STATES[0])[1];
+  let noteFilter = "all", libFilter = "all";
+  function statusSel(item, onChange){ const sel = document.createElement("select"); sel.className = "st st-"+(item.status||"new"); STATES.forEach(([k,n])=>{ const o = document.createElement("option"); o.value=k; o.textContent=n; if ((item.status||"new")===k) o.selected=true; sel.appendChild(o); }); sel.onchange = ()=>onChange(sel.value); return sel; }
+  function filtBar(box, items, cur, onPick){ box.innerHTML=""; const all=[["all","Sab"],...STATES]; all.forEach(([k,n])=>{ const b=document.createElement("button"); b.type="button"; const c = k==="all" ? items.length : items.filter(i=>(i.status||"new")===k).length; b.textContent = n+(c?" "+c:""); if (k===cur) b.className="on"; b.onclick=()=>onPick(k); box.appendChild(b); }); }
 
   // ---------- library ----------
   function loadLib(){ try { return JSON.parse(LS.get("kh_lib")||"[]"); } catch(e){ return []; } }
@@ -411,9 +458,9 @@ Default: har page par inline SVG cartoons (idea aur kahani: hook ka lamha, refle
   function addVersion(label, html){ if (!currentDoc) return; currentDoc.versions.push({label, html, date: new Date().toLocaleString()}); currentDoc.date = new Date().toLocaleString(); const lib = loadLib(); const i = lib.findIndex(d=>d.id===currentDoc.id); if (i>-1) lib[i] = currentDoc; else lib.unshift(currentDoc); saveLib(lib); curVer = currentDoc.versions.length-1; showVersion(curVer); }
   function showVersion(i){ if (!currentDoc || !currentDoc.versions[i]) return; curVer = i; const v = currentDoc.versions[i]; $("outPanel").classList.remove("hidden"); $("out").srcdoc = v.html; $("outTitle").textContent = currentDoc.title; renderVers(); }
   function renderVers(){ const box = $("vers"); box.innerHTML = ""; if (!currentDoc) return; currentDoc.versions.forEach((v,i)=>{ const b = document.createElement("button"); b.type="button"; b.textContent = "v"+(i+1)+" · "+v.label; b.title = v.date; if (i===curVer) b.className="cur"; b.onclick = ()=>showVersion(i); box.appendChild(b); }); }
-  function renderLib(){ const box = $("lib"); box.innerHTML = ""; const lib = loadLib(); if (!lib.length){ box.innerHTML = '<p class="mini">Abhi koi khaka nahi.</p>'; return; }
+  function renderLib(){ const box = $("lib"); box.innerHTML = ""; const all = loadLib(); filtBar($("libFilt"), all, libFilter, k=>{ libFilter=k; renderLib(); }); const lib = all.filter(d=>libFilter==="all"||(d.status||"new")===libFilter); if (!lib.length){ box.innerHTML = '<p class="mini">Yahan kuch nahi.</p>'; return; }
     lib.forEach(d=>{ const el = document.createElement("div"); el.className="note"; el.innerHTML = '<b></b><div class="d"></div><div class="m"><span class="mini"></span><span><button class="op" type="button">Kholo</button> <button class="del" type="button">✕</button></span></div>';
-      el.querySelector("b").textContent = d.title; el.querySelector(".d").textContent = d.date; el.querySelector(".mini").textContent = d.versions.length+" version"+(d.versions.length>1?"s":"")+" · "+(d.mode||"");
+      el.querySelector("b").textContent = d.title; el.querySelector(".d").textContent = d.date; el.querySelector(".mini").textContent = d.versions.length+" version"+(d.versions.length>1?"s":"")+" · "+(d.mode||""); el.querySelector(".d").appendChild(document.createTextNode(" ")); el.querySelector(".d").appendChild(statusSel(d, v=>{ const l = loadLib(); const x = l.find(y=>y.id===d.id); if (x){ x.status=v; if (currentDoc&&currentDoc.id===d.id) currentDoc.status=v; saveLib(l); } }));
       el.querySelector(".op").onclick = ()=>{ currentDoc = d; $("input").value = d.input||""; showVersion(d.versions.length-1); $("outPanel").scrollIntoView({behavior:"smooth"}); };
       el.querySelector(".del").onclick = ()=>{ if (!confirm("Ye khaka delete karein?")) return; const l = loadLib().filter(x=>x.id!==d.id); if (currentDoc && currentDoc.id===d.id){ currentDoc=null; $("outPanel").classList.add("hidden"); } saveLib(l); };
       box.appendChild(el); }); }
@@ -422,9 +469,9 @@ Default: har page par inline SVG cartoons (idea aur kahani: hook ka lamha, refle
   // ---------- notes ----------
   function loadNotes(){ try { return JSON.parse(LS.get("kh_notes")||"[]"); } catch(e){ return []; } }
   function saveNotes(n){ LS.set("kh_notes", JSON.stringify(n)); renderNotes(); }
-  function renderNotes(){ const box = $("notes"); box.innerHTML=""; const n = loadNotes(); $("noteCount").textContent = n.length ? n.length+" notes" : ""; if (!n.length){ box.innerHTML='<p class="mini">Yahan apne ideas note karo. Baad mein ek click se khaka.</p>'; return; }
+  function renderNotes(){ const box = $("notes"); box.innerHTML=""; const all = loadNotes(); $("noteCount").textContent = all.length ? all.length+" notes" : ""; filtBar($("noteFilt"), all, noteFilter, k=>{ noteFilter=k; renderNotes(); }); const n = all.filter(i=>noteFilter==="all"||(i.status||"new")===noteFilter); if (!n.length){ box.innerHTML='<p class="mini">Yahan kuch nahi. Ideas note karo, phir Queue, Approved ya Use ho chuka mark karo.</p>'; return; }
     n.forEach(it=>{ const el = document.createElement("div"); el.className="note"; el.innerHTML='<div class="t"></div><div class="m"><span class="d"></span><span><button class="use" type="button">💡 Khaka</button> <button class="ed" type="button">✎</button> <button class="del" type="button">✕</button></span></div>';
-      el.querySelector(".t").textContent = it.text; el.querySelector(".d").textContent = it.date;
+      el.querySelector(".t").textContent = it.text; el.querySelector(".d").textContent = it.date+" "; el.querySelector(".d").appendChild(statusSel(it, v=>{ const l = loadNotes(); const x = l.find(y=>y.id===it.id); if (x){ x.status=v; saveNotes(l); } })); if ((it.status||"new")==="used") el.style.opacity=".7";
       el.querySelector(".use").onclick = ()=>{ $("input").value = it.text; window.scrollTo({top:0,behavior:"smooth"}); $("input").focus(); };
       el.querySelector(".ed").onclick = ()=>{ $("noteText").value = it.text; const l = loadNotes().filter(x=>x.id!==it.id); saveNotes(l); $("noteText").focus(); };
       el.querySelector(".del").onclick = ()=>{ saveNotes(loadNotes().filter(x=>x.id!==it.id)); };
@@ -495,6 +542,51 @@ Default: har page par inline SVG cartoons (idea aur kahani: hook ka lamha, refle
     const add = "\n\nAsif ke jawab (sawalon par):\n"+rows.map(x=>"- "+x.q+"\n  "+x.a).join("\n"); $("input").value = ($("input").value.trim())+add; $("qaPanel").classList.add("hidden"); $("go").click(); };
   $("enSum").onclick = async ()=>{ const t = await textTask("ensum", "English khulasa", MAXTOK.ensum); if (t){ try { await navigator.clipboard.writeText(t.trim()); status("English khulasa copy ho gaya."); } catch(e){ status("Copy nahi hua, neeche se select kar ke copy karo.", true); } } };
   $("mkStory").onclick = ()=>{ document.querySelector('input[name="mode"][value="story"]').checked = true; $("extra").focus(); status("Direction likho (optional) aur Banao dabao."); window.scrollTo({top:0,behavior:"smooth"}); };
+
+  $("whatIf").onclick = ()=>textTask("whatif", "Kya ho agar", MAXTOK.whatif);
+  $("score").onclick = ()=>textTask("score", "Score card", MAXTOK.score);
+  $("angles").onclick = ()=>textTask("angles", "Alag zaviye", MAXTOK.angles);
+
+  // compare versions
+  $("compare").onclick = ()=>{ if (!currentDoc || currentDoc.versions.length<2){ status("Farq ke liye kam az kam do versions chahiye.", true); return; } const sel = $("cmpSel"); sel.innerHTML=""; currentDoc.versions.forEach((v,i)=>{ if (i===curVer) return; const o = document.createElement("option"); o.value=i; o.textContent="v"+(i+1)+" · "+v.label; sel.appendChild(o); }); $("cmpOut").textContent=""; $("cmpPanel").classList.remove("hidden"); };
+  $("cmpClose").onclick = ()=>$("cmpPanel").classList.add("hidden");
+  function htmlText(h){ const d = new DOMParser().parseFromString(h,"text/html"); return (d.body && d.body.innerText) || d.body.textContent || ""; }
+  $("cmpGo").onclick = async ()=>{ const i = parseInt($("cmpSel").value,10); const a = htmlText(currentDoc.versions[i].html).slice(0,9000), b = docText().slice(0,9000); const out = $("cmpOut"); out.textContent=""; busy(true,"Farq..."); 
+    try { const r = await callClaude({task: TASK.compare(), maxTokens: MAXTOK.compare, user: "Purana (v"+(i+1)+"):\n<<<\n"+a+"\n>>>\n\nMaujooda (v"+(curVer+1)+"):\n<<<\n"+b+"\n>>>", onText:(o)=>out.textContent=o}); status("Farq tayyar. "+tokLine(r)); } catch(e){ status(e.message||String(e), true); } finally { busy(false); } };
+
+  // talk to character
+  $("talk").onclick = ()=>{ $("talkPanel").classList.remove("hidden"); $("talkWho").focus(); };
+  $("talkClose").onclick = ()=>$("talkPanel").classList.add("hidden");
+  $("talkMic").onclick = ()=> rec ? stopMic() : startMic($("talkQ"), $("talkMic"));
+  let talkHist = [];
+  $("talkGo").onclick = async ()=>{ if (rec) stopMic(); const who = $("talkWho").value.trim(), q = $("talkQ").value.trim(); if (!who||!q){ status("Kirdar ka naam aur sawal dono likho.", true); return; }
+    const log = $("talkLog"); log.textContent += (log.textContent?"\n\n":"")+"آصف: "+q+"\n"+who+": "; const start = log.textContent; busy(true,"Jawab...");
+    try { const r = await callClaude({task: TASK.talk(), maxTokens: MAXTOK.talk, user: "Kirdar: "+who+"\n"+ctx()+"\n\nPichli baat:\n"+talkHist.slice(-6).join("\n")+"\n\nAsif ka sawal: "+q, onText:(o)=>log.textContent = start+o}); talkHist.push("Asif: "+q, who+": "+r.text.trim()); $("talkQ").value=""; status("Jawab aaya. "+tokLine(r)); } catch(e){ status(e.message||String(e), true); } finally { busy(false); } };
+
+  // spark
+  const SP_US = { r:["stepdad aur sauteli beti","ex-wife naye fit shohar ke saath","beta jo baap par sharminda hai","biwi jo ab dekhti nahi","purana school dost","saas (mother-in-law)","chhota bhai jo kamyab ho gaya","boss jo 'help' samjhe"], p:["bowling league finals","Thanksgiving table","church parking lot","high school reunion","airport pickup","backyard BBQ","DMV ki line","Little League ka game","Christmas tree lot","diner ka booth","gas station","wedding reception"], w:["koi use pehchanta nahi","partner fit shakhs ko chunta hai","bachcha saath dikhne mein sharminda","koi use dada ya baap samajhta hai","use 'the help' samjha jata hai","us ki jagah koi aur bula liya gaya","us ka naam list mein nahi","us ki kursi kisi aur ko de di gayi"] };
+  const SP_GEN = { r:["baap beta","do purane dost","shohar biwi","bhai behen","ustad shagird","padosi","maa beti","malik aur mulazim"], p:["bus stop","shaadi hall","dukaan","hospital ka corridor","gaon ka chowk","office","railway station","chhat"], w:["koi use pehchanta nahi","us ki jagah kisi aur ko chuna gaya","us ka raaz khul gaya","use chhota samjha gaya","us ki qurbani kisi ne nahi dekhi","wo waqt par nahi pohanch saka"] };
+  function spark(){ const S = $("nuflos").checked ? SP_US : SP_GEN; const pick = a => a[Math.floor(Math.random()*a.length)]; const t = pick(S.r)+" · "+pick(S.p)+" · "+pick(S.w); $("spark").textContent = t; return t; }
+  spark(); $("sparkNew").onclick = spark; $("sparkNote").onclick = ()=>{ addNote("Chingari: "+$("spark").textContent); status("Chingari note mein chali gayi."); $("tabNotes").click(); };
+
+  // soch (voice journal)
+  $("tabSoch").onclick = ()=>{ ["tabNotes","tabLib","tabSoch"].forEach(id=>$(id).classList.remove("on")); $("tabSoch").classList.add("on"); $("notesPane").classList.add("hidden"); $("libPane").classList.add("hidden"); $("sochPane").classList.remove("hidden"); };
+  const _tn = $("tabNotes").onclick, _tl = $("tabLib").onclick;
+  $("tabNotes").onclick = ()=>{ _tn(); $("tabSoch").classList.remove("on"); $("sochPane").classList.add("hidden"); };
+  $("tabLib").onclick = ()=>{ _tl(); $("tabSoch").classList.remove("on"); $("sochPane").classList.add("hidden"); };
+  $("sochMic").onclick = ()=> rec ? stopMic() : startMic($("sochText"), $("sochMic"));
+  $("sochClear").onclick = ()=>{ $("sochText").value=""; $("sochOut").textContent=""; $("sochIdeas").innerHTML=""; };
+  $("sochGo").onclick = async ()=>{ if (rec) stopMic(); const t = $("sochText").value.trim(); if (!t){ status("Pehle kuch bolo ya likho.", true); return; } const out = $("sochOut"); out.textContent=""; $("sochIdeas").innerHTML=""; busy(true,"Ideas...");
+    try { const r = await callClaude({task: TASK.journal(), maxTokens: MAXTOK.journal, user: "Asif ki soch:\n<<<\n"+t+"\n>>>", onText:(o)=>out.textContent=o});
+      const blocks = r.text.split(/\n\s*\n/).map(x=>x.trim()).filter(x=>/^IDEA/i.test(x)); const box = $("sochIdeas");
+      blocks.forEach(bk=>{ const b = document.createElement("button"); b.type="button"; b.className="tool"; b.textContent="＋ "+(bk.split("\n")[0].slice(0,40)); b.onclick=()=>{ addNote(bk); status("Idea note mein chala gaya."); }; box.appendChild(b); });
+      status("Ideas tayyar. "+tokLine(r)); } catch(e){ status(e.message||String(e), true); } finally { busy(false); } };
+
+  // tool toggles
+  const TOOLS = [["spark","⚡ Aaj ki chingari"],["askq","❓ Sawal poocho"],["flaws","🔍 Jhol"],["story","🎬 Kahani"],["ensum","🇺🇸 English khulasa"],["whatif","💭 Kya ho agar"],["score","🎯 Score card"],["angles","🔭 Alag zaviye"],["compare","🆚 Versions ka farq"],["talk","🗣 Kirdar se baat"],["journal","🎙 Soch"],["speak","🔊 Sun kar parho"]];
+  function loadTools(){ try { return JSON.parse(LS.get("kh_tools")||"{}"); } catch(e){ return {}; } }
+  function applyTools(){ const t = loadTools(); document.querySelectorAll("[data-tool]").forEach(el=>{ const k = el.getAttribute("data-tool"); el.classList.toggle("hidden", t[k]===false); }); if (loadTools().journal===false && $("tabSoch").classList.contains("on")) $("tabNotes").click(); }
+  (function(){ const box = $("toolToggles"); const t = loadTools(); TOOLS.forEach(([k,name])=>{ const l = document.createElement("label"); const c = document.createElement("input"); c.type="checkbox"; c.checked = t[k]!==false; c.onchange = ()=>{ const tt = loadTools(); tt[k] = c.checked; LS.set("kh_tools", JSON.stringify(tt)); applyTools(); }; l.appendChild(c); l.appendChild(document.createTextNode(" "+name)); box.appendChild(l); }); applyTools(); })();
 
   // ---------- copy / speak / export ----------
   $("copyText").onclick = async ()=>{ const t = docText(); if (!t){ status("Copy ke liye kuch nahi.", true); return; } try { await navigator.clipboard.writeText(t); status("Poora text copy ho gaya."); } catch(e){ status("Copy nahi hua.", true); } };
